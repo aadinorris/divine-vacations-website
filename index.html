@@ -204,6 +204,62 @@
       transform: rotate(180deg);
     }
 
+    /* Mobile snap carousels for card rows */
+    @media (max-width: 1023.5px) {
+      .snap-track {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-bottom: 0.5rem;
+      }
+
+      .snap-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      .snap-track > * {
+        flex: 0 0 78%;
+        max-width: 78%;
+        scroll-snap-align: center;
+      }
+    }
+
+    @media (min-width: 640px) and (max-width: 1023.5px) {
+      .snap-track > * {
+        flex-basis: 47%;
+        max-width: 47%;
+      }
+    }
+
+    /* Animated CTA trailing arrows */
+    .offering-action .offering-arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .offering-card:hover .offering-arrow,
+    .offering-action:active .offering-arrow {
+      transform: translate(3px, -3px);
+    }
+
+    .offering-action:active {
+      transform: scale(0.97);
+    }
+
+    /* Touch devices: CTAs are hover-revealed on desktop — keep visible */
+    @media (hover: none) {
+      .offering-action {
+        transform: none;
+        color: #fff;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -406,7 +462,7 @@
         </p>
       </div>
 
-      <div id="offering-grid" class="mt-14 grid gap-5 lg:grid-cols-2">
+      <div id="offering-grid" class="snap-track mt-14 grid gap-5 lg:grid-cols-2">
         <article class="offering-card group relative min-h-[28rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d] lg:min-h-[34rem]">
           <img
             class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
@@ -462,7 +518,12 @@
         </article>
       </div>
 
-      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="mt-4 flex justify-end gap-3 lg:hidden" data-track-nav="offering-grid">
+        <button type="button" data-dir="-1" aria-label="Previous destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">←</button>
+        <button type="button" data-dir="1" aria-label="Next destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">→</button>
+      </div>
+
+      <div id="offering-grid-small" class="snap-track mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <article class="offering-card group relative min-h-[23rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d]">
           <img
             class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
@@ -570,6 +631,11 @@
             </button>
           </div>
         </article>
+      </div>
+
+      <div class="mt-4 flex justify-end gap-3 lg:hidden" data-track-nav="offering-grid-small">
+        <button type="button" data-dir="-1" aria-label="Previous destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">←</button>
+        <button type="button" data-dir="1" aria-label="Next destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">→</button>
       </div>
     </div>
   </section>
@@ -1276,7 +1342,7 @@
         </p>
       </div>
 
-      <div class="mt-14 grid gap-5 lg:grid-cols-3">
+      <div id="secondary-grid" class="snap-track mt-14 grid gap-5 lg:grid-cols-3">
         <!-- BALI -->
         <article class="secondary-module group relative flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-3xl border border-white/10">
           <img
@@ -1400,6 +1466,11 @@
             </a>
           </div>
         </article>
+      </div>
+
+      <div class="mt-4 flex justify-end gap-3 lg:hidden" data-track-nav="secondary-grid">
+        <button type="button" data-dir="-1" aria-label="Previous packages" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">←</button>
+        <button type="button" data-dir="1" aria-label="Next packages" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">→</button>
       </div>
 
       <!-- Master Live Consultation -->
@@ -1718,6 +1789,50 @@
           section.scrollIntoView({ behavior: "smooth" });
         });
       }
+    })();
+  </script>
+  <script>
+    /* Mobile snap-track arrows + CTA arrow wrapping (section-only) */
+    (() => {
+      document.querySelectorAll("[data-track-nav]").forEach((nav) => {
+        const track = document.getElementById(nav.dataset.trackNav);
+        if (!track) return;
+        nav.querySelectorAll("button").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const card = track.querySelector(":scope > *");
+            const step = (card ? card.offsetWidth : track.clientWidth) + 20;
+            track.scrollBy({
+              left: (btn.dataset.dir === "-1" ? -1 : 1) * step,
+              behavior: "smooth"
+            });
+          });
+        });
+      });
+
+      document.querySelectorAll(".offering-action").forEach((btn) => {
+        [...btn.childNodes].forEach((node) => {
+          if (node.nodeType === 3 && node.textContent.includes("↗")) {
+            const parts = node.textContent.split("↗");
+            const frag = document.createDocumentFragment();
+            parts.forEach((part, idx) => {
+              if (part) frag.appendChild(document.createTextNode(part));
+              if (idx < parts.length - 1) {
+                const s = document.createElement("span");
+                s.className = "offering-arrow";
+                s.setAttribute("aria-hidden", "true");
+                s.textContent = "↗";
+                frag.appendChild(s);
+              }
+            });
+            btn.replaceChild(frag, node);
+          } else if (
+            node.nodeType === 1 &&
+            node.textContent.trim() === "↗"
+          ) {
+            node.classList.add("offering-arrow");
+          }
+        });
+      });
     })();
   </script>
 
