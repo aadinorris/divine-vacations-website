@@ -1,14 +1,14 @@
 # macOS
 .DS_Store
 
-# Raw portrait sources (processed copies live in images/team/)
-Joy.jpg
-Komal.jpg
-Shailender.jpg
-Shailendra.jpg
-komal.jpg
-joy.jpg
-shailendra.jpg
+# Raw portrait sources in portal root (processed copies live in images/team/)
+/Joy.jpg
+/Komal.jpg
+/Shailender.jpg
+/Shailendra.jpg
+/joy.jpg
+/komal.jpg
+/shailendra.jpg
 
 # Legacy unused shim (portal uses styles.css directly)
-style.css
+/style.css
