@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="en" class="bg-[#070b19]">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dubai Signature Experience — a private 5-night curated itinerary by Divine Vacations." />
+  <title>Dubai Signature Experience | Divine Vacations</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ["Playfair Display", "Georgia", "serif"],
+            sans: ["Inter", "sans-serif"],
+            display: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: { ink: "#102b35", champagne: "#d8b986" }
+        }
+      }
+    };
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #070b19; }
+    .hero-overlay {
+      background:
+        linear-gradient(90deg, rgba(7,11,25,.94) 0%, rgba(7,11,25,.5) 58%, rgba(7,11,25,.3) 100%),
+        linear-gradient(0deg, rgba(7,11,25,.98) 0%, transparent 65%);
+    }
+    .image-card {
+      background-size: cover;
+      background-position: center;
+      transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .activity-card:hover .image-card { transform: scale(1.06); }
+    @keyframes pulseRing {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,.5), 0 10px 34px rgba(52,211,153,.28); }
+      50% { box-shadow: 0 0 0 12px rgba(52,211,153,0), 0 10px 40px rgba(52,211,153,.45); }
+    }
+    .cta-urgent { animation: pulseRing 2.4s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-[#070b19] font-sans text-white antialiased">
+  <!-- Top navigation -->
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#070b19]/85 backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-10 lg:px-16">
+      <div class="flex items-center gap-4">
+        <a href="index.html#top" class="flex items-center gap-3" aria-label="Back to home">
+          <img src="divine-vacations-logo.png" alt="Divine Vacations" class="h-9 w-auto rounded-md border border-white bg-white px-2 py-0.5 object-contain" />
+          <span class="hidden items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/60 transition hover:text-white sm:inline-flex">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i> Home
+          </span>
+        </a>
+      </div>
+
+      <nav class="hidden items-center gap-8 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/55 md:flex" aria-label="Page navigation">
+        <a href="#overview" class="transition hover:text-white">Overview</a>
+        <a href="#itinerary" class="transition hover:text-white">Itinerary</a>
+        <a href="#inclusions" class="transition hover:text-white">Inclusions</a>
+        <a href="#expert" class="transition hover:text-white">Expert</a>
+      </nav>
+
+      <a
+        href="#expert"
+        class="hidden rounded-full bg-emerald-500 px-5 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition hover:bg-emerald-400 md:inline-flex"
+      >
+        Book Live Consultation
+      </a>
+
+      <button id="menu-button" type="button" aria-label="Open navigation menu" aria-expanded="false" class="rounded-full border border-white/15 p-2 md:hidden">
+        <i data-lucide="menu" class="h-5 w-5"></i>
+      </button>
+    </div>
+
+    <nav id="mobile-menu" class="hidden border-t border-white/10 bg-[#070b19] px-6 py-7 md:hidden">
+      <div class="flex flex-col gap-6 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
+        <a href="index.html#top">← Home</a>
+        <a href="#overview">Overview</a>
+        <a href="#itinerary">Itinerary</a>
+        <a href="#inclusions">Inclusions</a>
+        <a href="#expert">Expert</a>
+        <a href="#expert" class="w-fit rounded-full bg-emerald-500 px-5 py-3 text-white">
+          Book Live Consultation
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Header / Hero -->
+    <section id="top" class="relative flex min-h-[720px] items-end overflow-hidden pt-20">
+      <div
+        class="absolute inset-0 bg-cover bg-center"
+        style="background-image:url('https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=2200&q=85')"
+      ></div>
+      <div class="hero-overlay absolute inset-0"></div>
+
+      <div class="relative mx-auto w-full max-w-7xl px-6 pb-20 sm:px-10 lg:px-16 lg:pb-28">
+        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-200">
+          Divine Vacations · Dubai Signature Experience
+        </p>
+        <h1 class="mt-6 max-w-5xl font-serif text-6xl leading-[0.9] tracking-[-0.02em] sm:text-8xl lg:text-[8.5rem]">
+          Dubai<br /><span class="italic text-blue-200">Signature</span>
+        </h1>
+        <p class="mt-8 max-w-xl text-base leading-7 text-white/70 sm:text-lg">
+          Five private nights across skyline icons, heritage souks, and golden
+          desert evenings — curated end-to-end by local experts.
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          <a
+            href="https://wa.me/919654383877?text=Hi%20Divine%20Vacations,%20I%20have%20reviewed%20the%20Dubai%20itinerary%20and%20would%20like%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cta-urgent inline-flex items-center gap-3 rounded-full bg-emerald-500 px-7 py-4 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-emerald-400"
+          >
+            Request Live Consultation <i data-lucide="arrow-right" class="h-4 w-4"></i>
+          </a>
+          <a
+            href="#itinerary"
+            class="inline-flex items-center gap-3 rounded-full border border-white/30 px-7 py-4 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-white hover:text-[#07111f]"
+          >
+            View Itinerary
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trip Overview -->
+    <section id="overview" class="bg-[#070b19] px-6 py-20 sm:px-10 lg:px-16 lg:py-24">
+      <div class="mx-auto max-w-7xl">
+        <div class="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p class="text-[10px] font-semibold uppercase tracking-[0.28em] text-blue-300">Trip overview</p>
+            <h2 class="mt-4 font-serif text-5xl tracking-tight text-white sm:text-6xl">Everything considered.</h2>
+          </div>
+          <p class="max-w-sm text-sm leading-6 text-white/50 sm:text-right">A considered itinerary with every essential detail handled beautifully.</p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/50">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-300">Duration</span>
+              <i data-lucide="clock-3" width="19" height="19" stroke-width="1.5" class="text-white/60"></i>
+            </div>
+            <h3 class="mt-10 font-serif text-2xl leading-tight text-white">5 Nights / 6 Days</h3>
+            <p class="mt-3 text-sm leading-6 text-white/50">Carefully paced, never rushed</p>
+          </article>
+
+          <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/50">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-300">Stays</span>
+              <i data-lucide="hotel" width="19" height="19" stroke-width="1.5" class="text-white/60"></i>
+            </div>
+            <h3 class="mt-10 font-serif text-2xl leading-tight text-white">Premium 5-Star &amp; 4-Star</h3>
+            <p class="mt-3 text-sm leading-6 text-white/50">Handpicked luxury properties</p>
+          </article>
+
+          <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/50">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-300">Transfers</span>
+              <i data-lucide="car-front" width="19" height="19" stroke-width="1.5" class="text-white/60"></i>
+            </div>
+            <h3 class="mt-10 font-serif text-2xl leading-tight text-white">Private Chauffeur</h3>
+            <p class="mt-3 text-sm leading-6 text-white/50">No shared hassle, pure comfort</p>
+          </article>
+
+          <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/50">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-300">Support</span>
+              <i data-lucide="headset" width="19" height="19" stroke-width="1.5" class="text-white/60"></i>
+            </div>
+            <h3 class="mt-10 font-serif text-2xl leading-tight text-white">24/7 On-Ground Help</h3>
+            <p class="mt-3 text-sm leading-6 text-white/50">Dedicated local DMC teams</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Itinerary + activity visuals -->
+    <section id="itinerary" class="bg-[#0b1021] px-6 py-20 sm:px-10 lg:px-16 lg:py-24">
+      <div class="mx-auto max-w-7xl">
+        <div class="max-w-2xl">
+          <p class="text-[10px] font-semibold uppercase tracking-[0.28em] text-blue-300">Day by day</p>
+          <h2 class="mt-4 font-serif text-5xl tracking-tight text-white sm:text-6xl">Six days, four icons.</h2>
+        </div>
+
+        <div class="mt-12 grid gap-5 md:grid-cols-2">
+          <article class="activity-card group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+            <div class="relative h-64 overflow-hidden sm:h-72">
+              <div class="image-card absolute inset-0" style="background-image:url('https://images.unsplash.com/photo-1546412414-e1885259563a?auto=format&fit=crop&w=1400&q=85')"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/20 to-transparent"></div>
+              <div class="absolute bottom-6 left-6 right-6">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-200">Day 01 · Evening</p>
+                <h3 class="mt-2 font-serif text-3xl text-white sm:text-4xl">Marina Dhow Cruise</h3>
+                <p class="mt-2 text-sm leading-6 text-white/65">Dinner sailing beneath the illuminated skyline.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="activity-card group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+            <div class="relative h-64 overflow-hidden sm:h-72">
+              <div class="image-card absolute inset-0" style="background-image:url('https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?auto=format&fit=crop&w=1400&q=85')"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/20 to-transparent"></div>
+              <div class="absolute bottom-6 left-6 right-6">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-200">Day 02 · Icons</p>
+                <h3 class="mt-2 font-serif text-3xl text-white sm:text-4xl">Dubai Frame &amp; Burj Khalifa</h3>
+                <p class="mt-2 text-sm leading-6 text-white/65">Old soul to new skyline, 124 floors up.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="activity-card group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+            <div class="relative h-64 overflow-hidden sm:h-72">
+              <div class="image-card absolute inset-0" style="background-image:url('https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?auto=format&fit=crop&w=1400&q=85')"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/20 to-transparent"></div>
+              <div class="absolute bottom-6 left-6 right-6">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-200">Days 03–04 · Desert</p>
+                <h3 class="mt-2 font-serif text-3xl text-white sm:text-4xl">Desert Safari &amp; Dune Bashing</h3>
+                <p class="mt-2 text-sm leading-6 text-white/65">Red dunes, camels, BBQ dinner under stars.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="activity-card group overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+            <div class="relative h-64 overflow-hidden sm:h-72">
+              <div class="image-card absolute inset-0" style="background-image:url('https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=1400&q=85')"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/20 to-transparent"></div>
+              <div class="absolute bottom-6 left-6 right-6">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-200">Day 05 · Abu Dhabi</p>
+                <h3 class="mt-2 font-serif text-3xl text-white sm:text-4xl">Abu Dhabi Grand Mosque</h3>
+                <p class="mt-2 text-sm leading-6 text-white/65">Serene scale and luminous detail.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-10 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.02] px-7 sm:px-9">
+          <div class="grid gap-2 py-5 sm:grid-cols-[90px_1fr] sm:gap-6">
+            <span class="font-serif text-2xl text-blue-200/80">01</span>
+            <p class="text-sm leading-7 text-white/65"><strong class="text-white">Arrival.</strong> Private airport pickup, Marina check-in, evening dhow cruise dinner.</p>
+          </div>
+          <div class="grid gap-2 py-5 sm:grid-cols-[90px_1fr] sm:gap-6">
+            <span class="font-serif text-2xl text-blue-200/80">02</span>
+            <p class="text-sm leading-7 text-white/65"><strong class="text-white">Icons.</strong> Jumeirah, souks, Dubai Frame, Burj Khalifa 124th floor, fountain evening.</p>
+          </div>
+          <div class="grid gap-2 py-5 sm:grid-cols-[90px_1fr] sm:gap-6">
+            <span class="font-serif text-2xl text-blue-200/80">03–04</span>
+            <p class="text-sm leading-7 text-white/65"><strong class="text-white">Desert.</strong> Leisure morning, Palm photo stop, red-dune safari with BBQ dinner and live shows.</p>
+          </div>
+          <div class="grid gap-2 py-5 sm:grid-cols-[90px_1fr] sm:gap-6">
+            <span class="font-serif text-2xl text-blue-200/80">05</span>
+            <p class="text-sm leading-7 text-white/65"><strong class="text-white">Abu Dhabi.</strong> Grand Mosque, Corniche, Heritage Village, farewell evening in Dubai.</p>
+          </div>
+          <div class="grid gap-2 py-5 sm:grid-cols-[90px_1fr] sm:gap-6">
+            <span class="font-serif text-2xl text-blue-200/80">06</span>
+            <p class="text-sm leading-7 text-white/65"><strong class="text-white">Departure.</strong> Leisurely breakfast and private assisted airport transfer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inclusions -->
+    <section id="inclusions" class="bg-[#070b19] px-6 py-20 sm:px-10 lg:px-16 lg:py-24">
+      <div class="mx-auto max-w-7xl">
+        <div class="max-w-2xl">
+          <p class="text-[10px] font-semibold uppercase tracking-[0.28em] text-blue-300">Transparent pricing</p>
+          <h2 class="mt-4 font-serif text-5xl tracking-tight text-white sm:text-6xl">Covered vs. excluded.</h2>
+        </div>
+
+        <div class="mt-12 grid gap-4 lg:grid-cols-2">
+          <article class="rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.06] p-7 sm:p-8">
+            <h3 class="flex items-center gap-3 font-serif text-2xl text-white">
+              <i data-lucide="check-circle-2" width="22" height="22" class="text-emerald-400"></i> Included
+            </h3>
+            <ul class="mt-5 space-y-3 text-sm leading-6 text-white/70">
+              <li>5 nights Marina 5-star residence with daily breakfast</li>
+              <li>Private airport transfers and full-time chauffeur</li>
+              <li>Burj Khalifa Level 124, desert safari, dhow cruise dinner</li>
+              <li>Abu Dhabi day excursion with Grand Mosque visit</li>
+              <li>UAE visa assistance and 24/7 on-ground support</li>
+            </ul>
+          </article>
+
+          <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 sm:p-8">
+            <h3 class="flex items-center gap-3 font-serif text-2xl text-white">
+              <i data-lucide="x-circle" width="22" height="22" class="text-white/40"></i> Excluded
+            </h3>
+            <ul class="mt-5 space-y-3 text-sm leading-6 text-white/60">
+              <li>International airfare to and from Dubai</li>
+              <li>Tourism dirham fee payable at the hotel</li>
+              <li>Lunches, personal expenses, and shopping</li>
+              <li>Anything not expressly mentioned above</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Master Live Consultation -->
+    <section id="expert" class="relative overflow-hidden bg-[#0b1830] px-6 py-20 sm:px-10 lg:px-16 lg:py-28">
+      <div class="absolute right-0 top-0 h-[30rem] w-[30rem] rounded-full bg-blue-400/15 blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-blue-200">Master live consultation</p>
+          <h2 class="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.02em] text-white sm:text-7xl">
+            Speak with Ms.&nbsp;Komal <span class="italic text-blue-200">now.</span>
+          </h2>
+          <p class="mt-7 max-w-xl text-base leading-8 text-white/65">
+            Partner &amp; Senior Travel Expert with 15+ years shaping exceptional
+            journeys. Share your dates on WhatsApp and get this Dubai itinerary
+            tailored to your pace — slots for this week are limited.
+          </p>
+          <a
+            href="https://wa.me/919654383877?text=Hi%20Divine%20Vacations,%20I%20have%20reviewed%20the%20Dubai%20itinerary%20and%20would%20like%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cta-urgent mt-9 inline-flex items-center gap-4 rounded-full bg-emerald-500 px-8 py-4 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-emerald-400"
+          >
+            Request Live Consultation / Speak With Ms. Komal Now
+            <i data-lucide="arrow-right" class="h-4 w-4"></i>
+          </a>
+          <p class="mt-5 text-xs uppercase tracking-[0.18em] text-white/45">
+            Prefer to call? <a href="tel:+919654383877" class="font-bold text-white transition hover:text-blue-200">+91 9654383877</a>
+          </p>
+        </div>
+
+        <article class="rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl sm:p-10">
+          <div class="flex flex-col items-center text-center">
+            <span class="relative flex h-36 w-36 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#f4e3bb] via-[#d8b986] to-[#b98f4e] font-display text-4xl font-extrabold text-[#102b35] ring-4 ring-blue-300/30">
+              MK<img src="images/team/komal.jpg" alt="Ms. Komal" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+            </span>
+            <h3 class="mt-6 font-serif text-4xl text-white">Ms. Komal</h3>
+            <p class="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-blue-200">
+              Partner &amp; Senior Travel Expert
+            </p>
+            <p class="mt-4 font-serif text-6xl text-white">15<span class="text-blue-200">+</span></p>
+            <p class="mt-2 text-[11px] uppercase tracking-[0.2em] text-white/50">Years designing journeys</p>
+          </div>
+          <div class="mt-8 space-y-3 border-t border-white/10 pt-7 text-sm">
+            <a href="tel:+919654383877" class="flex items-center justify-center gap-3 rounded-xl border border-white/15 bg-white/5 px-5 py-3.5 font-semibold text-white transition hover:border-blue-300/60 hover:bg-blue-400/10">
+              <i data-lucide="phone" class="h-4 w-4 text-blue-200"></i> +91 9654383877
+            </a>
+            <p class="flex items-center justify-center gap-2 text-xs text-white/55">
+              <span class="h-2 w-2 rounded-full bg-emerald-300"></span> Available for your consultation
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 bg-[#070b19] px-6 py-10 sm:px-10 lg:px-16">
+    <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 lg:grid-cols-[1.2fr_.8fr_1.2fr_.8fr]">
+      <div>
+        <p class="font-serif text-2xl tracking-[0.02em]">DIVINE VACATIONS<span class="text-blue-300">.</span></p>
+        <p class="mt-4 max-w-xs text-[10px] font-semibold uppercase leading-5 tracking-[0.2em] text-blue-300">
+          Eat Less Travel More — Exceptional Vacations Your Way
+        </p>
+      </div>
+      <div>
+        <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-300">Explore</p>
+        <nav class="mt-5 flex flex-col gap-3 text-[13px] text-gray-400" aria-label="Footer navigation">
+          <a href="#top" class="transition hover:text-white">Top</a>
+          <a href="#itinerary" class="transition hover:text-white">Itinerary</a>
+          <a href="#inclusions" class="transition hover:text-white">Inclusions</a>
+          <a href="index.html#top" class="transition hover:text-white">Home</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-300">Global offices</p>
+        <div class="mt-5 space-y-4 text-[13px] leading-6 text-gray-400">
+          <p><strong class="font-semibold text-gray-200">Delhi</strong><br />Vikaspuri, New Delhi 110018</p>
+          <p><strong class="font-semibold text-gray-200">Mumbai</strong><br />Nalanda CHS, Ghatkopar, Mumbai</p>
+          <p><strong class="font-semibold text-gray-200">Dubai</strong><br />AL Tayar Building, Bur Dubai · <a href="tel:+971554484232" class="transition hover:text-white">+971 554484232</a></p>
+          <p><strong class="font-semibold text-gray-200">Thailand</strong><br />Nongprue, Pattaya, Chon Buri 20150</p>
+        </div>
+      </div>
+      <div>
+        <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-blue-300">Direct sales</p>
+        <div class="mt-5 space-y-4 text-[13px] leading-6 text-gray-400">
+          <a href="tel:+919654383877" class="block font-semibold text-white transition hover:text-blue-200">+91 9654383877</a>
+          <a href="mailto:divineandvacations@gmail.com" class="block break-words transition hover:text-white">divineandvacations@gmail.com</a>
+          <a href="https://wa.me/919654383877?text=Hi%20Divine%20Vacations,%20I%20have%20reviewed%20the%20Dubai%20itinerary%20and%20would%20like%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal." target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-3 rounded-lg bg-emerald-600 px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.13em] text-white transition hover:bg-emerald-500">
+            Chat on WhatsApp ↗
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mx-auto mt-12 flex max-w-7xl flex-col gap-3 border-t border-white/10 pt-7 text-[10px] uppercase tracking-[0.14em] text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+      <p>Copyright © 2026 Divine Vacations. All rights reserved.</p>
+      <p>Dubai Signature Experience</p>
+    </div>
+  </footer>
+
+  <script>
+    if (window.lucide) lucide.createIcons();
+
+    const menuButton = document.getElementById("menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener("click", () => {
+        const hidden = mobileMenu.classList.toggle("hidden");
+        menuButton.setAttribute("aria-expanded", String(!hidden));
+      });
+      mobileMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuButton.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+  </script>
+</body>
+</html>

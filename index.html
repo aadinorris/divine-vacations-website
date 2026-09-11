@@ -1,0 +1,2143 @@
+<!doctype html>
+<html lang="en" class="bg-[#102b35]">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Divine Vacations creates tailored luxury journeys across Asia and the Indian Ocean." />
+  <title>Divine Vacations — Curated Journeys</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            serif: ["Cormorant Garamond", "serif"],
+            display: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            ink: "#102b35",
+            champagne: "#d8b986"
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
+  <!-- Swiper.js + GSAP engines -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Portal stylesheet (sections below the hero + quote modal) -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: #102b35;
+    }
+
+    body {
+      color: white;
+      font-family: Inter, sans-serif;
+    }
+
+    .swiper-slide {
+      height: auto;
+    }
+
+    .thumbs .swiper-slide {
+      opacity: 0.58;
+      cursor: pointer;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .thumbs .swiper-slide-thumb-active {
+      opacity: 1;
+      transform: translateY(-4px);
+    }
+
+    .thumbs .swiper-slide-thumb-active .thumb-frame {
+      outline: 2px solid #d8b986;
+      outline-offset: 3px;
+    }
+
+    .hero-image {
+      transition: transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .main-swiper .swiper-slide-active .hero-image {
+      transform: scale(1.04);
+    }
+
+    #top header a,
+    #top header nav,
+    #top header button,
+    #top [data-open-quote],
+    #top #destinations {
+      font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    #top #slide-eyebrow,
+    #top #destinations p {
+      font-weight: 700;
+    }
+
+    #top #slide-title {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.085em;
+      line-height: 0.88;
+      color: #fff;
+    }
+
+    #top #slide-description {
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    /* Signature destinations: crisp white titles (beats global h-styles) */
+    #top #featured-destinations h2,
+    #top #featured-destinations h3 {
+      color: #fff;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+    }
+
+    #top [data-open-quote],
+    #top header a {
+      font-weight: 800;
+    }
+
+    @keyframes ctaGlow {
+      0%,
+      100% {
+        box-shadow:
+          0 0 0 0 rgba(216, 185, 134, 0.55),
+          0 8px 30px rgba(216, 185, 134, 0.25);
+      }
+      50% {
+        box-shadow:
+          0 0 0 12px rgba(216, 185, 134, 0),
+          0 8px 38px rgba(216, 185, 134, 0.5);
+      }
+    }
+
+    @keyframes ctaSheen {
+      0% {
+        left: -70%;
+      }
+      55%,
+      100% {
+        left: 140%;
+      }
+    }
+
+    .btn-dynamic {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f4e3bb 0%, #d8b986 45%, #b98f4e 100%);
+      animation: ctaGlow 2.6s ease-in-out infinite;
+    }
+
+    .btn-dynamic::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -70%;
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255, 255, 255, 0.75),
+        transparent
+      );
+      transform: skewX(-20deg);
+      animation: ctaSheen 3.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .btn-dynamic:hover {
+      background: #f1dcb5;
+    }
+
+    /* Destinations dropdown (glass, midnight) */
+    #dest-dropdown-menu {
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 8px);
+      transition:
+        opacity 0.22s ease,
+        transform 0.22s ease,
+        visibility 0.22s;
+      pointer-events: none;
+    }
+
+    #dest-dropdown.open #dest-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+    }
+
+    #dest-dropdown.open #dest-chevron {
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+
+      .hero-image {
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+    <!-- New Tailwind hero brings its own header (see #top below) -->
+
+    <main id="top" class="relative min-h-screen overflow-hidden bg-ink text-white">
+    <div class="absolute inset-0">
+      <div
+        class="swiper main-swiper h-full w-full"
+        aria-label="Featured destinations"
+      >
+        <div id="hero-slides" class="swiper-wrapper"></div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(5,20,25,.84),rgba(5,20,25,.38)_55%,rgba(5,20,25,.18)),linear-gradient(0deg,rgba(5,20,25,.72),transparent_60%)]"
+      ></div>
+    </div>
+
+    <header
+      class="relative z-20 flex items-center justify-between px-6 py-6 sm:px-10 lg:px-16"
+    >
+      <a
+        href="#top"
+        class="flex items-center"
+        aria-label="Divine Vacations home"
+      >
+        <img
+          src="divine-vacations-logo.png"
+          alt="Divine Vacations"
+          class="h-10 w-auto rounded-lg border border-white bg-white px-4 py-1 object-contain shadow-lg md:h-14"
+        />
+      </a>
+
+      <nav
+        class="hidden items-center gap-8 text-xs uppercase tracking-[0.2em] text-white/75 md:flex"
+        aria-label="Primary navigation"
+      >
+        <a href="#top" class="transition-colors hover:text-white">Home</a>
+        <div class="relative" id="dest-dropdown">
+          <button
+            id="dest-dropdown-btn"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            class="flex items-center gap-2 transition-colors hover:text-white"
+          >
+            Destinations
+            <svg id="dest-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <div
+            id="dest-dropdown-menu"
+            role="menu"
+            aria-label="Destinations"
+            class="absolute left-1/2 top-full z-50 mt-4 w-72 rounded-2xl border border-white/10 bg-[#070b19]/95 p-2 shadow-[0_24px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+          >
+            <a href="dubai.html" role="menuitem" class="flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition hover:bg-white/5">
+              <span class="text-[13px] font-semibold text-white">Dubai</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-champagne">Exclusive</span>
+            </a>
+            <a href="thailand.html" role="menuitem" class="flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition hover:bg-white/5">
+              <span class="text-[13px] font-semibold text-white">Thailand</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-champagne">Most Popular</span>
+            </a>
+            <a href="#featured-destinations" role="menuitem" class="flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition hover:bg-white/5">
+              <span class="text-[13px] font-semibold text-white">Maldives</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-champagne">Luxury Stay</span>
+            </a>
+            <a href="#featured-destinations" role="menuitem" class="flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition hover:bg-white/5">
+              <span class="text-[13px] font-semibold text-white">Bali</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-champagne">Special Offers</span>
+            </a>
+            <a href="#featured-destinations" role="menuitem" class="flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition hover:bg-white/5">
+              <span class="text-[13px] font-semibold text-white">Singapore</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-champagne">City &amp; Cruise</span>
+            </a>
+            <a href="#featured-destinations" role="menuitem" class="flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition hover:bg-white/5">
+              <span class="text-[13px] font-semibold text-white">Europe</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-champagne">Swiss &amp; Paris</span>
+            </a>
+          </div>
+        </div>
+        <a href="#about-brand" class="transition-colors hover:text-white">
+          About Us
+        </a>
+        <a href="pilgrim.html" class="transition-colors hover:text-white">
+          Christian Tours
+        </a>
+        <span class="hidden h-4 w-px bg-white/15 md:block" aria-hidden="true"></span>
+        <a href="#privacy-commitment" id="privacy-nav-link" class="text-[10px] tracking-[0.2em] text-white/50 transition-colors hover:text-white">
+          Privacy Policy
+        </a>
+      </nav>
+
+      <button
+        data-open-quote
+        class="rounded-full border border-white/40 px-5 py-2.5 text-xs uppercase tracking-[0.18em] transition hover:bg-white hover:text-ink"
+      >
+        Contact us
+      </button>
+    </header>
+
+    <section
+      class="relative z-20 mx-auto flex min-h-[calc(100svh-92px)] w-full max-w-7xl flex-col justify-end px-6 pb-8 pt-10 sm:px-10 lg:px-16"
+      aria-label="Featured destination"
+    >
+      <div class="grid w-full items-end gap-10 lg:grid-cols-[1.05fr_.95fr]">
+        <div class="max-w-2xl">
+          <p
+            id="slide-eyebrow"
+            class="text-xs uppercase tracking-[0.28em] text-champagne"
+          ></p>
+          <h1
+            id="slide-title"
+            class="mt-4 text-[clamp(3.2rem,8vw,7rem)] uppercase !text-white"
+          ></h1>
+          <p
+            id="slide-description"
+            class="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base"
+          ></p>
+          <div class="mt-7 flex flex-wrap items-center gap-5">
+            <button
+              data-open-quote
+              class="btn-dynamic rounded-full px-7 py-3 text-xs uppercase tracking-[0.18em] text-ink transition"
+            >
+              Get a Quote &rarr;
+            </button>
+            <span
+              id="slide-page"
+              class="text-xs tracking-[0.2em] text-white/60"
+            ></span>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div
+            class="swiper thumbs w-full"
+            aria-label="Destination thumbnails"
+          >
+            <div id="thumb-slides" class="swiper-wrapper items-end"></div>
+          </div>
+          <div class="mt-4 flex items-center gap-3">
+            <button
+              id="thumb-prev"
+              type="button"
+              aria-label="Previous destination"
+              class="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-ink"
+            >
+              &larr;
+            </button>
+            <button
+              id="thumb-next"
+              type="button"
+              aria-label="Next destination"
+              class="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-ink"
+            >
+              &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section id="featured-destinations"
+    class="relative overflow-hidden bg-[#070b19] px-6 py-24 text-white sm:px-10 lg:px-16 lg:py-32"
+    aria-labelledby="offerings-title"
+  >
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#102b35] to-transparent"></div>
+    <div class="pointer-events-none absolute -left-32 top-32 h-80 w-80 rounded-full bg-blue-600/15 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-indigo-600/10 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl">
+      <div class="offerings-header max-w-2xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-300">
+          World-class experiences
+        </p>
+        <h2
+          id="offerings-title"
+          class="mt-5 font-display font-extrabold uppercase !text-white text-[clamp(2.6rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.04em]"
+        >
+          Our Signature Destinations
+        </h2>
+        <p class="mt-6 max-w-xl text-sm leading-7 text-gray-300 sm:text-base">
+          Specialized curations for Dubai and Thailand, alongside bespoke global getaways.
+        </p>
+      </div>
+
+      <div id="offering-grid" class="mt-14 grid gap-5 lg:grid-cols-2">
+        <article class="offering-card group relative min-h-[28rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d] lg:min-h-[34rem]">
+          <img
+            class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=1800&q=80"
+            alt="Burj Khalifa and Dubai skyline"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/35 to-transparent"></div>
+          <span class="absolute right-5 top-5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">
+            Specialist hub
+          </span>
+          <div class="absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8">
+            <p class="text-xs uppercase tracking-[0.22em] text-blue-300">
+              United Arab Emirates
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-5xl">Dubai</h3>
+            <a
+              href="dubai.html"
+              class="offering-action mt-5 inline-flex translate-y-3 items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/0 transition duration-300 group-hover:translate-y-0 group-hover:text-white"
+            >
+              Explore itineraries
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="offering-card group relative min-h-[28rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d] lg:min-h-[34rem]">
+          <img
+            class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1800&q=80"
+            alt="Thai temple surrounded by tropical greenery"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/35 to-transparent"></div>
+          <span class="absolute right-5 top-5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md">
+            Specialist hub
+          </span>
+          <div class="absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8">
+            <p class="text-xs uppercase tracking-[0.22em] text-blue-300">
+              Southeast Asia
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-5xl">Thailand</h3>
+            <a
+              href="thailand.html"
+              class="offering-action mt-5 inline-flex translate-y-3 items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/0 transition duration-300 group-hover:translate-y-0 group-hover:text-white"
+            >
+              Explore itineraries
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="offering-card group relative min-h-[23rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d]">
+          <img
+            class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=1200&q=80"
+            alt="Merlion and Marina Bay Sands at night"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/30 to-transparent"></div>
+          <span class="absolute right-4 top-4 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] backdrop-blur-md">
+            Curated
+          </span>
+          <div class="absolute inset-x-5 bottom-5">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-blue-300">
+              Southeast Asia
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Singapore</h3>
+            <button
+              type="button"
+              data-open-quote
+              class="offering-action mt-4 inline-flex translate-y-3 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/0 transition duration-300 group-hover:translate-y-0 group-hover:text-white"
+            >
+              Explore ↗
+            </button>
+          </div>
+        </article>
+
+        <article class="offering-card group relative min-h-[23rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d]">
+          <img
+            class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1200&q=80"
+            alt="Tegallalang rice terraces in Bali"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/30 to-transparent"></div>
+          <span class="absolute right-4 top-4 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] backdrop-blur-md">
+            Curated
+          </span>
+          <div class="absolute inset-x-5 bottom-5">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-blue-300">
+              Indonesia
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Bali</h3>
+            <button
+              type="button"
+              data-open-quote
+              class="offering-action mt-4 inline-flex translate-y-3 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/0 transition duration-300 group-hover:translate-y-0 group-hover:text-white"
+            >
+              Explore ↗
+            </button>
+          </div>
+        </article>
+
+        <article class="offering-card group relative min-h-[23rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d]">
+          <img
+            class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80"
+            alt="Maldives overwater villas and turquoise sea"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/30 to-transparent"></div>
+          <span class="absolute right-4 top-4 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] backdrop-blur-md">
+            Curated
+          </span>
+          <div class="absolute inset-x-5 bottom-5">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-blue-300">
+              Indian Ocean
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Maldives</h3>
+            <button
+              type="button"
+              data-open-quote
+              class="offering-action mt-4 inline-flex translate-y-3 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/0 transition duration-300 group-hover:translate-y-0 group-hover:text-white"
+            >
+              Explore ↗
+            </button>
+          </div>
+        </article>
+
+        <article class="offering-card group relative min-h-[23rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d]">
+          <img
+            class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80"
+            alt="Eiffel Tower in Paris at dusk"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/30 to-transparent"></div>
+          <span class="absolute right-4 top-4 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] backdrop-blur-md">
+            Curated
+          </span>
+          <div class="absolute inset-x-5 bottom-5">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-blue-300">
+              Europe
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Europe</h3>
+            <button
+              type="button"
+              data-open-quote
+              class="offering-action mt-4 inline-flex translate-y-3 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/0 transition duration-300 group-hover:translate-y-0 group-hover:text-white"
+            >
+              Explore ↗
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .offerings-header,
+    .offering-card {
+      opacity: 0;
+      transform: translate3d(0, 42px, 0);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .offering-card:nth-child(1) {
+      transform: translate3d(-42px, 0, 0);
+    }
+
+    .offering-card:nth-child(2) {
+      transform: translate3d(42px, 0, 0);
+    }
+
+    .offerings-header.is-visible,
+    .offering-card.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    #offering-grid .offering-card:nth-child(2) {
+      transition-delay: 100ms;
+    }
+
+    #offering-grid + div .offering-card:nth-child(1) {
+      transition-delay: 180ms;
+    }
+
+    #offering-grid + div .offering-card:nth-child(2) {
+      transition-delay: 260ms;
+    }
+
+    #offering-grid + div .offering-card:nth-child(3) {
+      transition-delay: 340ms;
+    }
+
+    #offering-grid + div .offering-card:nth-child(4) {
+      transition-delay: 420ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .offerings-header,
+      .offering-card {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const section = document.querySelector("#featured-destinations");
+
+      if (!section) return;
+
+      const revealItems = section.querySelectorAll(
+        ".offerings-header, .offering-card"
+      );
+
+      const observer = new IntersectionObserver(
+        (entries, instance) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add("is-visible");
+            instance.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.01,
+          rootMargin: "0px 0px 12% 0px"
+        }
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+    })();
+  </script>
+
+  <section
+    id="trust-credibility"
+    class="relative overflow-hidden bg-[#070b19] px-6 py-24 text-white sm:px-10 lg:px-16 lg:py-32"
+    aria-labelledby="trust-title"
+  >
+    <div class="pointer-events-none absolute left-1/2 top-24 h-80 w-80 -translate-x-1/2 rounded-full bg-blue-600/10 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl">
+      <div class="trust-intro mx-auto max-w-3xl text-center">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-300">
+          ✦ Trusted relationships
+        </p>
+        <h2
+          id="trust-title"
+          class="mt-5 font-display font-extrabold uppercase !text-white text-[clamp(2.6rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.04em]"
+        >
+          Some of our clients...
+        </h2>
+        <p class="mt-6 text-sm leading-7 text-gray-300 sm:text-base">
+          Trusted by travel professionals and discerning travelers to deliver
+          seamless journeys across the world.
+        </p>
+      </div>
+
+      <div class="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <article class="partner-card">
+          <p>Akbar</p>
+          <span>Holidays</span>
+        </article>
+        <article class="partner-card">
+          <p>Flexi Tours</p>
+          <span>Travel partner</span>
+        </article>
+        <article class="partner-card">
+          <p>Flywell</p>
+          <span>Tours &amp; Travels</span>
+        </article>
+        <article class="partner-card">
+          <p>Luft</p>
+          <span>Holidays</span>
+        </article>
+        <article class="partner-card">
+          <p>Misba Holidays</p>
+          <span>Pvt. Ltd.</span>
+        </article>
+        <article class="partner-card">
+          <p>Samarth</p>
+          <span>Holidays</span>
+        </article>
+        <article class="partner-card sm:col-span-3 lg:col-span-2">
+          <p>Suryoday</p>
+          <span>A Bank of Smiles</span>
+        </article>
+      </div>
+
+      <div class="mt-20 text-center">
+        <span
+          class="inline-flex rounded-full border border-blue-400/30 bg-blue-500/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-blue-300"
+        >
+          Affiliated Partners
+        </span>
+      </div>
+
+      <!-- SWAP: save each official logo under images/partners/ with the exact
+           filename below. Tiles show the names until the files exist. -->
+      <div class="partner-logo-grid mt-8">
+        <article class="partner-card partner-logo-card">
+          <img src="images/partners/tafi.png" alt="TAFI — Travel Agents Federation of India" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <p>TAFI</p>
+          <span>Industry affiliation</span>
+        </article>
+        <article class="partner-card partner-logo-card">
+          <img src="images/partners/rail-europe.png" alt="Rail Europe" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <p>Rail Europe</p>
+          <span>Rail journeys</span>
+        </article>
+        <article class="partner-card partner-logo-card">
+          <img src="images/partners/iatte.png" alt="IATTE — Indian Association of Travel and Tourism Experts" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <p>IATTE</p>
+          <span>Travel &amp; tourism</span>
+        </article>
+        <article class="partner-card partner-logo-card">
+          <img src="images/partners/britrail.png" alt="BritRail" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <p>BritRail</p>
+          <span>UK rail passes</span>
+        </article>
+        <article class="partner-card partner-logo-card">
+          <img src="images/partners/china-like-never-before.png" alt="China Like Never Before" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <p>China Like</p>
+          <span>Never Before</span>
+        </article>
+        <article class="partner-card partner-logo-card">
+          <img src="images/partners/ok-ferry.png" alt="OK Ferry" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <p>OK Ferry</p>
+          <span>Island transfers</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    #trust-credibility h2 {
+      color: #fff;
+    }
+
+    #trust-credibility .partner-logo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    #trust-credibility .partner-logo-card {
+      background: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 0.9rem;
+      width: auto;
+      min-height: 4.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 0.75rem;
+      text-align: center;
+    }
+
+    #trust-credibility .partner-logo-card img {
+      display: block;
+      max-width: 100%;
+      max-height: 2.75rem;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    @media (min-width: 640px) {
+      #trust-credibility .partner-logo-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      #trust-credibility .partner-logo-card {
+        min-height: 5.5rem;
+        padding: 0.8rem 1rem;
+      }
+
+      #trust-credibility .partner-logo-card img {
+        max-height: 3.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      #trust-credibility .partner-logo-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      #trust-credibility .partner-logo-card {
+        min-height: 6rem;
+        padding: 0.9rem 1rem;
+      }
+
+      #trust-credibility .partner-logo-card img {
+        max-height: 4rem;
+      }
+    }
+
+    #trust-credibility .partner-logo-card p {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #102b35;
+      margin: 0;
+    }
+
+    #trust-credibility .partner-logo-card span {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5b6b7b;
+    }
+
+    #trust-credibility .partner-logo-card.has-logo p,
+    #trust-credibility .partner-logo-card.has-logo span {
+      display: none;
+    }
+
+    #trust-credibility .partner-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    #trust-credibility .partner-card p {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 0.35rem;
+    }
+
+    #trust-credibility .partner-card span {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .trust-intro,
+    .partner-card {
+      opacity: 0;
+      transform: translate3d(0, 36px, 0);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .partner-card:nth-child(2) {
+      transition-delay: 100ms;
+    }
+
+    .partner-card:nth-child(3) {
+      transition-delay: 180ms;
+    }
+
+    .partner-card:nth-child(4) {
+      transition-delay: 260ms;
+    }
+
+    .partner-card:nth-child(5) {
+      transition-delay: 340ms;
+    }
+
+    .partner-card:nth-child(6) {
+      transition-delay: 420ms;
+    }
+
+    .partner-card:nth-child(7) {
+      transition-delay: 500ms;
+    }
+
+    .trust-intro.is-visible,
+    .partner-card.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .trust-intro,
+      .partner-card {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const section = document.querySelector("#trust-credibility");
+
+      if (!section) return;
+
+      const revealItems = section.querySelectorAll(
+        ".trust-intro, .partner-card"
+      );
+
+      const observer = new IntersectionObserver(
+        (entries, instance) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add("is-visible");
+            instance.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.01,
+          rootMargin: "0px 0px 12% 0px"
+        }
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+    })();
+  </script>
+
+  <section
+    id="about-brand"
+    class="relative overflow-hidden bg-[#070b19] px-6 py-24 text-white sm:px-10 lg:px-16 lg:py-32"
+    aria-labelledby="about-title"
+  >
+    <div class="pointer-events-none absolute right-0 top-1/4 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl">
+      <div class="about-intro mx-auto max-w-3xl text-center">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-300">
+          ✦ About Divine Vacations
+        </p>
+        <h2
+          id="about-title"
+          class="mt-5 font-display font-extrabold uppercase !text-white text-[clamp(2.6rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.04em]"
+        >
+          Pioneering Exceptional Journeys, Your Way
+        </h2>
+        <p class="mt-6 text-sm leading-7 text-gray-300 sm:text-base">
+          Thoughtful travel design, human expertise, and trusted local knowledge
+          brought together for journeys that feel effortless.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-5 lg:grid-cols-[1.15fr_.85fr]">
+        <article
+          class="about-card rounded-2xl border border-white/10 bg-[#10182d]/80 p-7 backdrop-blur-md sm:p-10"
+        >
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+            Our story, briefly
+          </p>
+          <h3 class="mt-6 max-w-2xl font-serif !text-white text-4xl leading-tight sm:text-5xl">
+            Personal journeys, not packages.
+          </h3>
+          <ul class="mt-8 space-y-4 text-sm leading-7 text-gray-300">
+            <li class="flex gap-3">
+              <span aria-hidden="true" class="mt-1 text-blue-300">✦</span>
+              <span>Founded in 2013 on one idea — exceptional travel designed around people.</span>
+            </li>
+            <li class="flex gap-3">
+              <span aria-hidden="true" class="mt-1 text-blue-300">✦</span>
+              <span><em class="text-white">Atithi Devo Bhava</em> — every traveller an honoured guest, first call to final transfer.</span>
+            </li>
+            <li class="flex gap-3">
+              <span aria-hidden="true" class="mt-1 text-blue-300">✦</span>
+              <span>Leisure, corporate, group and luxury — one team, end to end.</span>
+            </li>
+            <li class="flex gap-3">
+              <span aria-hidden="true" class="mt-1 text-blue-300">✦</span>
+              <span>Bases across Delhi, Mumbai, Dubai and Thailand with 24/7 support.</span>
+            </li>
+          </ul>
+          <div class="mt-8 flex flex-wrap gap-2 border-t border-white/10 pt-7">
+            <span class="rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-blue-200">Est. 2013</span>
+            <span class="rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-blue-200">TAFI Member</span>
+            <span class="rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-blue-200">Rail Europe Partner</span>
+            <span class="rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-blue-200">DMC Curation</span>
+            <span class="rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-blue-200">100% Tailored</span>
+          </div>
+        </article>
+
+        <article
+          class="about-card rounded-2xl border border-white/10 bg-[#10182d]/80 p-7 backdrop-blur-md sm:p-10"
+        >
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+            Built for confidence
+          </p>
+          <div class="mt-8 space-y-6">
+            <div class="flex gap-4">
+              <span class="mt-1 text-blue-300">01</span>
+              <div>
+                <h3 class="font-serif !text-white text-2xl">
+                  Global, with local presence
+                </h3>
+                <p class="mt-2 text-sm leading-6 text-gray-400">
+                  Teams and trusted partners across Delhi, Mumbai, Dubai, and
+                  Thailand.
+                </p>
+              </div>
+            </div>
+            <div class="h-px bg-white/10"></div>
+            <div class="flex gap-4">
+              <span class="mt-1 text-blue-300">02</span>
+              <div>
+                <h3 class="font-serif !text-white text-2xl">
+                  Depth behind every stay
+                </h3>
+                <p class="mt-2 text-sm leading-6 text-gray-400">
+                  Access to 1,00,000+ hotels and carefully selected experiences.
+                </p>
+              </div>
+            </div>
+            <div class="h-px bg-white/10"></div>
+            <div class="flex gap-4">
+              <span class="mt-1 text-blue-300">03</span>
+              <div>
+                <h3 class="font-serif !text-white text-2xl">
+                  Support that travels with you
+                </h3>
+                <p class="mt-2 text-sm leading-6 text-gray-400">
+                  Visa expertise, high success rates, and responsive 24/7
+                  assistance.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm leading-6 text-gray-300">
+            <span class="font-semibold text-white">Direct client transparency — </span>
+            real routings, real inclusions, no hidden fine print.
+          </div>
+        </article>
+      </div>
+
+      <div class="mt-5 grid gap-5 md:grid-cols-2">
+        <article class="about-card flex gap-6 rounded-2xl border border-white/10 bg-[#10182d]/80 p-7 backdrop-blur-md sm:items-center sm:p-8">
+          <span class="founder-photo">JN<img src="images/team/joy-norris.jpg" alt="Mr. Joy Norris" loading="lazy" /></span>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Founder &amp; Visionary</p>
+            <h3 class="mt-2 font-serif !text-white text-3xl">Mr. Joy Norris</h3>
+            <p class="mt-2 text-sm leading-6 text-gray-400">Sets Divine Vacations&apos; luxury-first direction across leisure, corporate and group travel.</p>
+          </div>
+        </article>
+        <article class="about-card flex gap-6 rounded-2xl border border-white/10 bg-[#10182d]/80 p-7 backdrop-blur-md sm:items-center sm:p-8">
+          <span class="founder-photo">SP<img src="images/team/shailendra-pawar.jpg" alt="Mr. Shailendra Pawar" loading="lazy" /></span>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Travel Operations</p>
+            <h3 class="mt-2 font-serif !text-white text-3xl">Mr. Shailendra Pawar</h3>
+            <p class="mt-2 text-sm leading-6 text-gray-400">Runs the operations engine — rail passes, visas, transfers and on-ground teams in sync.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="mt-5 grid grid-cols-2 gap-5 lg:grid-cols-4">
+        <div class="about-card rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-md sm:p-7">
+          <p class="font-serif text-4xl text-white sm:text-5xl">2013</p>
+          <p class="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">Serving since</p>
+        </div>
+        <div class="about-card rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-md sm:p-7">
+          <p class="font-serif text-4xl text-white sm:text-5xl">1,00,000+</p>
+          <p class="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">Hotel partners</p>
+        </div>
+        <div class="about-card rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-md sm:p-7">
+          <p class="font-serif text-4xl text-white sm:text-5xl">04</p>
+          <p class="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">Delhi · Mumbai · Dubai · Thailand</p>
+        </div>
+        <div class="about-card rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-md sm:p-7">
+          <p class="font-serif text-4xl text-white sm:text-5xl">24/7</p>
+          <p class="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">Traveller assistance</p>
+        </div>
+      </div>
+
+      <div
+        class="about-cta mt-5 flex flex-col items-start justify-between gap-6 rounded-2xl border border-blue-400/20 bg-blue-950/35 p-7 backdrop-blur-md sm:flex-row sm:items-center sm:p-9"
+      >
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+            Your next chapter starts here
+          </p>
+          <h3 class="mt-3 font-serif !text-white text-3xl sm:text-4xl">
+            Let&apos;s design something unforgettable.
+          </h3>
+        </div>
+        <button
+          type="button"
+          data-open-quote
+          class="shrink-0 rounded-lg bg-blue-500 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:scale-[1.02] hover:bg-blue-400"
+        >
+          Start planning ↗
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    #about-brand h2,
+    #about-brand h3 {
+      color: #fff;
+    }
+
+    #about-brand .team-avatar {
+      position: relative;
+      flex-shrink: 0;
+      width: 4.5rem;
+      height: 4.5rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #102b35;
+      background: linear-gradient(135deg, #f4e3bb 0%, #d8b986 60%, #b98f4e 100%);
+      border: 2px solid rgba(216, 185, 134, 0.65);
+      box-shadow: 0 8px 24px rgba(216, 185, 134, 0.22);
+      overflow: hidden;
+    }
+
+    #about-brand .team-avatar img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    #about-brand .team-avatar.has-photo img {
+      display: block;
+    }
+
+    #about-brand .founder-photo {
+      position: relative;
+      flex-shrink: 0;
+      width: 7rem;
+      height: 8.5rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: 2rem;
+      color: #102b35;
+      background: linear-gradient(135deg, #f4e3bb 0%, #d8b986 60%, #b98f4e 100%);
+      border: 1px solid rgba(216, 185, 134, 0.6);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    #about-brand .founder-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .about-intro,
+    .about-card,
+    .about-cta {
+      opacity: 0;
+      transform: translate3d(0, 36px, 0);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .about-card:nth-child(2) {
+      transition-delay: 140ms;
+    }
+
+    .about-cta {
+      transition-delay: 260ms;
+    }
+
+    .about-intro.is-visible,
+    .about-card.is-visible,
+    .about-cta.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .about-intro,
+      .about-card,
+      .about-cta {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const section = document.querySelector("#about-brand");
+
+      if (!section) return;
+
+      const revealItems = section.querySelectorAll(
+        ".about-intro, .about-card, .about-cta"
+      );
+
+      const observer = new IntersectionObserver(
+        (entries, instance) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add("is-visible");
+            instance.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.01,
+          rootMargin: "0px 0px 12% 0px"
+        }
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+    })();
+  </script>
+
+  <section
+    id="secondary-products"
+    class="relative overflow-hidden bg-[#070b19] px-6 py-24 text-white sm:px-10 lg:px-16 lg:py-32"
+    aria-labelledby="secondary-title"
+  >
+    <div class="pointer-events-none absolute -right-40 top-24 h-96 w-96 rounded-full bg-blue-600/10 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl">
+      <div class="secondary-intro mx-auto max-w-3xl text-center">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-300">
+          ✦ Secondary products
+        </p>
+        <h2
+          id="secondary-title"
+          class="mt-5 font-display font-extrabold uppercase !text-white text-[clamp(2.6rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.04em]"
+        >
+          Beyond the signatures
+        </h2>
+        <p class="mt-6 text-sm leading-7 text-gray-300 sm:text-base">
+          Proven, data-backed programs from live client files — expand any
+          module for routing, stays, and fulfilled guest stories.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-5 lg:grid-cols-3">
+        <!-- BALI -->
+        <article class="secondary-module group relative flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-3xl border border-white/10">
+          <img
+            src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1400&q=80"
+            alt="Luxury tropical infinity pool in Bali"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/60 to-transparent"></div>
+          <div class="relative p-7 sm:p-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-300">
+              Indonesia · 5N / 6D
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Bali Romantic Escape</h3>
+            <ul class="mt-4 space-y-2 text-[13px] leading-5 text-white/75">
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Duration — </strong>5N/6D · Ubud + Nusa Dua</li>
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Stay — </strong>3N Sthala Ubud + 3N Tijili Benoa</li>
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Highlight — </strong>Kintamani volcano + candlelight dinner</li>
+            </ul>
+            <!-- Verified: Mr. Varun Gupta, Bali -->
+            <figure class="mt-5 rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+              <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">✓ Verified guest story</p>
+              <blockquote class="mt-2 text-sm leading-6 text-white">
+                “The Ubud villa and the private candlelight dinner were beyond
+                anything we imagined.”
+              </blockquote>
+              <figcaption class="mt-2 text-[10px] uppercase tracking-[0.14em] text-white/55">
+                Mr. Varun Gupta · Bali Romantic Escape
+              </figcaption>
+            </figure>
+            <a
+              href="https://wa.me/919654383877?text=Hi%20Divine%20Vacations,%20I%20have%20reviewed%20the%20Bali%20Romantic%20Escape%20and%20would%20like%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-500 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition hover:bg-emerald-400"
+            >
+              Consult Ms. Komal <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- SINGAPORE + GENTING CRUISE -->
+        <article class="secondary-module group relative flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-3xl border border-white/10">
+          <img
+            src="https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=1400&q=80"
+            alt="Merlion and Marina Bay Sands at night"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/60 to-transparent"></div>
+          <div class="relative p-7 sm:p-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-300">
+              Singapore · Cruise + City
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Singapore &amp; Genting Cruise</h3>
+            <ul class="mt-4 space-y-2 text-[13px] leading-5 text-white/75">
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Duration — </strong>Cruise + city combo</li>
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Stay — </strong>Balcony stateroom + city hotel</li>
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Highlight — </strong>Universal Studios + Sentosa</li>
+            </ul>
+            <figure class="mt-5 rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+              <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">✓ Verified guest story</p>
+              <blockquote class="mt-2 text-sm leading-6 text-white">
+                “The private balcony stateroom and Universal VIP handling made
+                it effortless for the family.”
+              </blockquote>
+              <figcaption class="mt-2 text-[10px] uppercase tracking-[0.14em] text-white/55">
+                Mr. Ashish Bedi &amp; Family · Singapore &amp; Cruise
+              </figcaption>
+            </figure>
+            <a
+              href="https://wa.me/919654383877?text=Hi%20Divine%20Vacations,%20I%20have%20reviewed%20the%20Singapore%20%26%20Genting%20Cruise%20package%20and%20would%20like%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-500 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition hover:bg-emerald-400"
+            >
+              Consult Ms. Komal <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- EUROPE -->
+        <article class="secondary-module group relative flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-3xl border border-white/10">
+          <img
+            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1400&q=80"
+            alt="Eiffel Tower in Paris at dusk"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#070b19] via-[#070b19]/60 to-transparent"></div>
+          <div class="relative p-7 sm:p-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-300">
+              Swiss · Paris · Italy
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-4xl">Europe by Rail</h3>
+            <ul class="mt-4 space-y-2 text-[13px] leading-5 text-white/75">
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Duration — </strong>Multi-city rail circuit</li>
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Stay — </strong>Central 4-star hotels</li>
+              <li><strong class="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-300">Highlight — </strong>Jungfraujoch + Swiss Travel Pass</li>
+            </ul>
+            <figure class="mt-5 rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+              <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">✓ Verified guest story</p>
+              <blockquote class="mt-2 text-sm leading-6 text-white">
+                “Our Swiss and Paris holiday was organized with clinical
+                precision — everything was seamless.”
+              </blockquote>
+              <figcaption class="mt-2 text-[10px] uppercase tracking-[0.14em] text-white/55">
+                Rajesh &amp; Sunita Malhotra · Switzerland &amp; France
+              </figcaption>
+            </figure>
+            <a
+              href="https://wa.me/919654383877?text=Hi%20Divine%20Vacations,%20I%20have%20reviewed%20the%20Europe%20by%20Rail%20package%20and%20would%20like%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-500 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition hover:bg-emerald-400"
+            >
+              Consult Ms. Komal <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <!-- Master Live Consultation -->
+      <div class="secondary-cta relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl border border-emerald-400/25 bg-gradient-to-br from-emerald-500/[0.12] via-[#10182d] to-[#10182d] p-8 backdrop-blur-xl sm:p-10">
+        <div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
+          <span class="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#f4e3bb] via-[#d8b986] to-[#b98f4e] font-display text-2xl font-extrabold text-[#102b35] ring-4 ring-emerald-300/30">
+            MK<img src="images/team/komal.jpg" alt="Ms. Komal" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
+          </span>
+          <div class="flex-1">
+            <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">
+              Master live consultation
+            </p>
+            <h3 class="mt-2 font-serif !text-white text-3xl sm:text-4xl">Ms. Komal</h3>
+            <p class="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+              Senior Partner &amp; Operations Head · 15+ years experience
+            </p>
+            <a href="tel:+919654383877" class="mt-3 inline-block font-display text-xl font-extrabold tracking-wide text-white transition hover:text-emerald-300">
+              +91 9654383877
+            </a>
+          </div>
+          <a
+            href="https://wa.me/919911009115?text=Hi%20Divine%20Vacations,%20I%20reviewed%20the%20secondary%20destination%20packages%20and%20want%20to%20schedule%20a%20live%20consultation%20with%20Ms.%20Komal."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex shrink-0 items-center gap-3 rounded-full bg-emerald-500 px-8 py-4 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:scale-[1.02] hover:bg-emerald-400"
+          >
+            Request Live Consultation / Speak With Ms. Komal Now <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .secondary-intro,
+    .secondary-module,
+    .secondary-cta {
+      opacity: 0;
+      transform: translate3d(0, 36px, 0);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .secondary-intro.is-visible,
+    .secondary-module.is-visible,
+    .secondary-cta.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    #secondary-products summary::-webkit-details-marker {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .secondary-intro,
+      .secondary-module,
+      .secondary-cta {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const section = document.querySelector("#secondary-products");
+
+      if (!section) return;
+
+      const revealItems = section.querySelectorAll(
+        ".secondary-intro, .secondary-module, .secondary-cta"
+      );
+
+      const observer = new IntersectionObserver(
+        (entries, instance) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add("is-visible");
+            instance.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.01,
+          rootMargin: "0px 0px 12% 0px"
+        }
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+    })();
+  </script>
+
+      <!-- ================= QUOTE MODAL (WhatsApp lead capture) ================= -->
+      <div
+        id="quote-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 p-5 backdrop-blur-xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quote-title"
+      >
+        <div class="w-full max-w-xl rounded-2xl border border-blue-500/20 bg-[#0B132B] p-7 shadow-2xl sm:p-10">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-300">
+                ✦ Immediate response on WhatsApp
+              </p>
+              <h2 id="quote-title" class="mt-3 font-serif text-4xl text-white">
+                Get a Quote
+              </h2>
+              <p class="mt-3 max-w-md text-sm leading-6 text-white/60">
+                Fill out your details to instantly connect with our specialist on WhatsApp.
+              </p>
+            </div>
+            <button
+              data-close-quote
+              class="rounded-full border border-blue-500/20 p-2 text-white/60 transition hover:border-blue-400 hover:text-white"
+              aria-label="Close quote form"
+            >
+              ×
+            </button>
+          </div>
+          <form id="quote-form" class="mt-8 grid gap-4 sm:grid-cols-2">
+            <label class="block text-sm text-white/70">
+              Full Name *
+              <input
+                required
+                name="name"
+                class="mt-2 w-full rounded-lg border border-blue-500/20 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="Your name"
+              />
+            </label>
+            <label class="block text-sm text-white/70">
+              Phone Number *
+              <input
+                required
+                type="tel"
+                name="phone"
+                class="mt-2 w-full rounded-lg border border-blue-500/20 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="+91 ..."
+              />
+            </label>
+            <label class="block text-sm text-white/70">
+              Email Address *
+              <input
+                required
+                type="email"
+                name="email"
+                class="mt-2 w-full rounded-lg border border-blue-500/20 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="you@example.com"
+              />
+            </label>
+            <label class="block text-sm text-white/70">
+              Target Destination
+              <input
+                id="quote-destination"
+                name="destination"
+                class="mt-2 w-full rounded-lg border border-blue-500/20 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+                readonly
+              />
+            </label>
+            <label class="block text-sm text-white/70 sm:col-span-2">
+              Travel Month / Date
+              <input
+                required
+                name="month"
+                class="mt-2 w-full rounded-lg border border-blue-500/20 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+                placeholder="e.g., November 2026"
+              />
+            </label>
+            <button
+              class="mt-2 w-full rounded-lg bg-emerald-600 px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-white transition hover:scale-[1.02] hover:bg-emerald-700 sm:col-span-2"
+              type="submit"
+            >
+              Continue to WhatsApp ↗
+            </button>
+          </form>
+          <div id="success-state" class="hidden py-14 text-center">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white">
+              ✓
+            </div>
+            <h3 class="mt-5 font-serif text-3xl text-white">
+              Opening WhatsApp
+            </h3>
+            <p class="mt-3 text-sm leading-6 text-white/60">
+              Your specialist will be ready to help.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Legacy sections removed — new Tailwind sections live above -->
+
+    </main>
+
+  <section
+    id="privacy-commitment"
+    class="relative overflow-hidden bg-[#070b19] px-6 pb-24 pt-4 text-white sm:px-10 lg:px-16"
+    aria-labelledby="privacy-title"
+  >
+    <div class="relative mx-auto max-w-4xl">
+      <div class="pp-intro mx-auto max-w-2xl text-center">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-300">
+          ✦ Your data, respected
+        </p>
+        <h2
+          id="privacy-title"
+          class="mt-5 font-display font-extrabold uppercase !text-white text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] tracking-[-0.04em]"
+        >
+          Privacy, in brief
+        </h2>
+      </div>
+
+      <details class="pp-panel group mt-10 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-6 p-7 sm:p-8 [&::-webkit-details-marker]:hidden">
+          <span class="font-serif !text-white text-2xl sm:text-3xl">Privacy Policy &amp; Data Commitment</span>
+          <span aria-hidden="true" class="pp-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 text-xl leading-none text-white transition duration-300 group-open:rotate-45 group-open:bg-white group-open:text-[#07111f]">+</span>
+        </summary>
+        <div class="px-7 pb-8 sm:px-8 sm:pb-10">
+          <ul class="grid gap-3 text-sm leading-6 text-white/70 sm:grid-cols-2">
+            <li class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+              <strong class="block text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">Data Collection &amp; Usage</strong>
+              <span class="mt-2 block">We collect only necessary booking details — names, contact info, traveler details — with your knowledge, solely to process itineraries.</span>
+            </li>
+            <li class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+              <strong class="block text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">Trusted Partner Sharing</strong>
+              <span class="mt-2 block">Shared strictly with essential partners (airlines, hotels, ground handlers, banks) to fulfill your booking. Never sold or rented to advertisers.</span>
+            </li>
+            <li class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+              <strong class="block text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">Security &amp; Storage</strong>
+              <span class="mt-2 block">Protected in secure, password-restricted databases accessible only to authorized accounts and IT personnel.</span>
+            </li>
+            <li class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+              <strong class="block text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">User Control</strong>
+              <span class="mt-2 block">Review, update, or opt out of promotional communications anytime — <a href="mailto:divineandvacations@gmail.com" class="text-white underline decoration-blue-300/60 underline-offset-4 transition hover:text-blue-200">divineandvacations@gmail.com</a> · <a href="tel:+919911009115" class="text-white underline decoration-blue-300/60 underline-offset-4 transition hover:text-blue-200">+91 99110 09115</a>.</span>
+            </li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <style>
+    #privacy-commitment h2,
+    #privacy-commitment summary span:first-child {
+      color: #fff;
+    }
+
+    #privacy-commitment summary::-webkit-details-marker {
+      display: none;
+    }
+
+    #privacy-commitment .pp-icon {
+      transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+    }
+
+    .pp-intro,
+    .pp-panel {
+      opacity: 0;
+      transform: translate3d(0, 36px, 0);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    .pp-intro.is-visible,
+    .pp-panel.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pp-intro,
+      .pp-panel {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const section = document.querySelector("#privacy-commitment");
+
+      if (!section) return;
+
+      const revealItems = section.querySelectorAll(".pp-intro, .pp-panel");
+
+      const observer = new IntersectionObserver(
+        (entries, instance) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add("is-visible");
+            instance.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.01,
+          rootMargin: "0px 0px 12% 0px"
+        }
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+
+      const navLink = document.querySelector("#privacy-nav-link");
+      if (navLink) {
+        navLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          const panel = section.querySelector("details");
+          if (panel) panel.open = true;
+          section.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    })();
+  </script>
+
+    <footer
+      id="global-contact"
+      class="border-t border-white/10 bg-[#070b19] px-6 pb-7 pt-24 text-white sm:px-10 lg:px-16 lg:pt-28"
+    >
+      <div class="mx-auto max-w-7xl">
+        <div class="grid gap-14 md:grid-cols-2 lg:grid-cols-[1.15fr_0.85fr_1.3fr_0.9fr] lg:gap-12">
+          <div>
+            <a
+              href="#top"
+              class="font-serif text-[1.7rem] leading-none tracking-[0.02em]"
+            >
+              DIVINE VACATIONS<span class="text-blue-300">.</span>
+            </a>
+            <p class="mt-5 max-w-xs text-[10px] font-semibold uppercase leading-5 tracking-[0.2em] text-blue-300">
+              Eat Less Travel More — Exceptional Vacations Your Way
+            </p>
+            <p class="mt-8 max-w-sm text-[13px] leading-7 tracking-[0.01em] text-gray-400">
+              Seamless luxury travel, thoughtful B2B and B2C curations, and a
+              guest-first approach rooted in
+              <em class="text-gray-200">Atithi Devo Bhava</em>.
+            </p>
+          </div>
+
+          <div>
+            <h2 class="text-[10px] font-semibold uppercase tracking-[0.24em] !text-blue-300">
+              Explore
+            </h2>
+            <nav
+              class="mt-7 flex flex-col gap-4 text-[13px] leading-5 tracking-[0.01em] text-gray-400"
+              aria-label="Footer navigation"
+            >
+              <a href="#top" class="transition hover:text-white">Home</a>
+              <a href="#featured-destinations" class="transition hover:text-white">
+                Signature Destinations
+              </a>
+              <a href="#about-brand" class="transition hover:text-white">
+                Our Strengths
+              </a>
+              <a href="https://wa.me/919911009115" target="_blank" rel="noreferrer" class="transition hover:text-white">
+                MICE Travel
+              </a>
+              <a href="#trust-credibility" class="transition hover:text-white">
+                Client Portfolio
+              </a>
+            </nav>
+          </div>
+
+          <div>
+            <h2 class="text-[10px] font-semibold uppercase tracking-[0.24em] !text-blue-300">
+              Global offices
+            </h2>
+            <div class="mt-7 space-y-6 text-[13px] leading-6 tracking-[0.01em] text-gray-400">
+              <p>
+                <strong class="font-semibold text-gray-200">Delhi</strong><br />
+                Office 366, 3rd floor, CRPF Camp, Vikaspuri, New Delhi 110018
+              </p>
+              <p>
+                <strong class="font-semibold text-gray-200">Mumbai</strong><br />
+                Office F 05, 1st Floor, Nalanda CHS, Bldg No. 2, Near Ghatkopar
+                railway station, Raigad chowk, Yashwant, Mumbai
+              </p>
+              <p>
+                <strong class="font-semibold text-gray-200">Dubai</strong><br />
+                Office no. 102, AL Tayar Building, Al Mina Road, Bur Dubai,
+                PO Box 181869<br />
+                <a href="tel:+971554484232" class="transition hover:text-white">
+                  +971 554484232
+                </a>
+              </p>
+              <p>
+                <strong class="font-semibold text-gray-200">Thailand</strong><br />
+                353, 53 Moo 9 Nongprue, Muang Pattaya, Bang Lamung District,
+                Chon Buri 20150
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="text-[10px] font-semibold uppercase tracking-[0.24em] !text-blue-300">
+              Direct sales
+            </h2>
+            <div class="mt-7 space-y-5 text-[13px] leading-6 tracking-[0.01em] text-gray-400">
+              <p class="space-y-1">
+                <a href="tel:+919911009115" class="block transition hover:text-white">
+                  9911009115
+                </a>
+                <a href="tel:+919871362192" class="block transition hover:text-white">
+                  9871362192
+                </a>
+                <a href="tel:+919654383877" class="block transition hover:text-white">
+                  9654383877
+                </a>
+              </p>
+              <a
+                href="mailto:divineandvacations@gmail.com"
+                class="block break-words transition hover:text-white"
+              >
+                divineandvacations@gmail.com
+              </a>
+              <a
+                href="https://www.divineandvacations.com"
+                target="_blank"
+                rel="noreferrer"
+                class="block transition hover:text-white"
+              >
+                www.divineandvacations.com
+              </a>
+              <a
+                href="https://wa.me/919911009115"
+                target="_blank"
+                rel="noreferrer"
+                class="mt-7 inline-flex items-center gap-3 rounded-lg bg-blue-500 px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.13em] text-white transition hover:bg-blue-400"
+              >
+                Chat on WhatsApp
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-20 flex flex-col gap-3 border-t border-white/10 pt-7 text-[10px] uppercase tracking-[0.14em] text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>Copyright © 2026 Divine Vacations. All rights reserved.</p>
+          <p>Designed for high-end travel conversions.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Swiper.js engine (main + thumbs sync) + GSAP cinematic text -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- ==========================================================================
+         Client Scripts: Hero slider, Navigation & Forms
+         ========================================================================== -->
+    <script>
+      /* ============================================================
+         DV HERO DATA — MODULAR: swap image URLs / text here.
+         RULES: NO prices, NO durations, NO subtitles, NO bullets.
+         Slide 1 THAILAND (default) → Dubai → Maldives → Europe.
+         ============================================================ */
+      window.DV_HERO_DATA = [
+        {
+          id: "thailand", label: "Thailand",
+          eyebrow: "Thailand • Islands & City",
+          title: "THAILAND",
+          desc: "Phuket, Krabi, Bangkok, Koh Samui. Share your dates for an instant quote.",
+          bg: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=2000&q=80",
+          thumb: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          id: "dubai", label: "Dubai",
+          eyebrow: "Dubai • Skyline & Desert",
+          title: "DUBAI",
+          desc: "Downtown, Palm Jumeirah, Marina, Desert Dunes. Ask now for availability.",
+          bg: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80",
+          thumb: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          id: "maldives", label: "Maldives",
+          eyebrow: "Maldives • Atolls & Lagoons",
+          title: "MALDIVES",
+          desc: "Clear lagoons and overwater villas. Seaplane in, speedboat out.",
+          bg: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=2000&q=80",
+          thumb: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          id: "europe", label: "Europe",
+          eyebrow: "Europe • Alps & Capitals",
+          title: "EUROPE",
+          desc: "Swiss Alps, Paris and Rome. Connected by fast inter-city rail.",
+          bg: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=2000&q=80",
+          thumb: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=600&q=80"
+        }
+      ];
+
+      (function initDvHero() {
+        const DATA = window.DV_HERO_DATA || [];
+        const heroSlides = document.getElementById("hero-slides");
+        const thumbSlides = document.getElementById("thumb-slides");
+        if (!DATA.length || !heroSlides || !thumbSlides) return;
+
+        const eyebrow = document.getElementById("slide-eyebrow");
+        const title = document.getElementById("slide-title");
+        const desc = document.getElementById("slide-description");
+        const page = document.getElementById("slide-page");
+        const total = String(DATA.length).padStart(2, "0");
+        let current = 0, mainSwiper = null, thumbSwiper = null;
+
+        // Preload + build MAIN slides and THUMB cards
+        DATA.forEach((d, i) => {
+          const a = new Image(); a.src = d.bg;
+          const b = new Image(); b.src = d.thumb;
+          heroSlides.insertAdjacentHTML("beforeend", `
+            <div class="swiper-slide !h-full">
+              <img src="${d.bg}" alt="${d.label}" class="hero-image h-full w-full object-cover" ${i > 0 ? 'loading="lazy"' : 'fetchpriority="high"'} />
+            </div>`);
+          thumbSlides.insertAdjacentHTML("beforeend", `
+            <div class="swiper-slide w-[148px] shrink-0 sm:w-[168px]">
+              <div class="thumb-frame relative aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="${d.thumb}" alt="${d.label}" class="h-full w-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+                <p class="absolute bottom-3 left-3 right-3 font-display text-sm font-bold leading-snug">${d.label}</p>
+              </div>
+            </div>`);
+        });
+
+        // Render text content + GSAP entrance for a slide
+        function render(i) {
+          current = (i + DATA.length) % DATA.length;
+          const d = DATA[current];
+          eyebrow.textContent = d.eyebrow;
+          title.textContent = d.title;
+          desc.textContent = d.desc;
+          page.textContent = String(current + 1).padStart(2, "0") + " / " + total;
+          if (window.gsap) {
+            gsap.fromTo(title,
+              { y: 60, opacity: 0 },
+              { y: 0, opacity: 1, duration: 1, ease: "power4.out", overwrite: "auto" });
+            gsap.fromTo(desc,
+              { y: 30, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.8, delay: 0.15, ease: "power3.out", overwrite: "auto" });
+          }
+          syncQuoteDest(d.label);
+        }
+
+        /* Swiper engines: MAIN bg fades; THUMBS act as synced navigation */
+        function initSwipers() {
+          thumbSwiper = new Swiper(".thumbs", {
+            slidesPerView: "auto",
+            spaceBetween: 12,
+            speed: 600,
+            loop: false,
+            slideToClickedSlide: true,
+            watchSlidesProgress: true
+          });
+          mainSwiper = new Swiper(".main-swiper", {
+            effect: "fade",
+            fadeEffect: { crossFade: true },
+            speed: 900,
+            loop: false,
+            threshold: 12,
+            thumbs: { swiper: thumbSwiper }
+          });
+          mainSwiper.on("slideChange", () => render(mainSwiper.activeIndex));
+        }
+
+        /* Minimal fallback if CDNs are unreachable */
+        function initFallback() {
+          const mains = [...heroSlides.children];
+          mains.forEach((el, k) => { el.style.display = k === 0 ? "block" : "none"; });
+          render(0);
+          thumbSlides.addEventListener("click", e => {
+            const s = e.target.closest(".swiper-slide");
+            if (!s) return;
+            const idx = [...thumbSlides.children].indexOf(s);
+            mains.forEach((el, k) => { el.style.display = k === idx ? "block" : "none"; });
+            thumbSlides.querySelectorAll(".swiper-slide").forEach((el, k) =>
+              el.classList.toggle("swiper-slide-thumb-active", k === idx));
+            render(idx);
+          });
+        }
+
+        // Arrow navigation (thumbs follow in sync via Thumbs module)
+        document.getElementById("thumb-prev").addEventListener("click", () => {
+          if (mainSwiper) mainSwiper.slidePrev();
+          else render(current - 1);
+        });
+        document.getElementById("thumb-next").addEventListener("click", () => {
+          if (mainSwiper) mainSwiper.slideNext();
+          else render(current + 1);
+        });
+
+        // Quote modal — WhatsApp lead capture (v0 dialog above)
+        const modal = document.getElementById("quote-modal");
+        const form = document.getElementById("quote-form");
+        const success = document.getElementById("success-state");
+        const quoteDestination = document.getElementById("quote-destination");
+
+        function syncQuoteDest(label) {
+          const d = DATA[current] || DATA[0];
+          quoteDestination.value = label || d.label;
+        }
+
+        function openQuote(label) {
+          syncQuoteDest(label);
+          form.classList.remove("hidden");
+          success.classList.add("hidden");
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+          document.body.classList.add("overflow-hidden");
+          const first = document.querySelector("#quote-form input");
+          if (first) first.focus();
+        }
+        function closeQuote() {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+          document.body.classList.remove("overflow-hidden");
+        }
+        document.querySelectorAll("[data-open-quote]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const card = btn.closest(".offering-card");
+            const label = card ? card.querySelector("h3").textContent.trim() : DATA[current].label;
+            openQuote(label);
+          });
+        });
+        document.querySelector("[data-close-quote]").addEventListener("click", closeQuote);
+        modal.addEventListener("mousedown", e => { if (e.target === modal) closeQuote(); });
+        document.addEventListener("keydown", e => { if (e.key === "Escape") closeQuote(); });
+
+        form.addEventListener("submit", e => {
+          e.preventDefault();
+          const values = new FormData(form);
+          const message =
+            `Hi Divine Vacations, my name is ${values.get("name")}. ` +
+            `I want a quote for ${values.get("destination")} in ${values.get("month")}. ` +
+            `Contact: ${values.get("phone")}. Email: ${values.get("email")}`;
+          window.open(
+            `https://wa.me/919911009115?text=${encodeURIComponent(message)}`,
+            "_blank",
+            "noopener,noreferrer"
+          );
+          form.classList.add("hidden");
+          success.classList.remove("hidden");
+        });
+
+        // Init: Thailand first, GSAP entrance plays
+        if (window.Swiper) { initSwipers(); render(0); }
+        else initFallback();
+      })();
+
+      /* Destinations dropdown: click toggles, hover opens (desktop),
+         closes on outside click, Escape, or selection */
+      (() => {
+        const wrap = document.getElementById("dest-dropdown");
+        if (!wrap) return;
+        const btn = document.getElementById("dest-dropdown-btn");
+        const open = () => {
+          wrap.classList.add("open");
+          btn.setAttribute("aria-expanded", "true");
+        };
+        const close = () => {
+          wrap.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+        };
+        btn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (wrap.classList.contains("open")) close();
+          else open();
+        });
+        if (window.matchMedia("(hover: hover)").matches) {
+          wrap.addEventListener("mouseenter", open);
+          wrap.addEventListener("mouseleave", close);
+        }
+        document.addEventListener("click", (event) => {
+          if (!wrap.contains(event.target)) close();
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") close();
+        });
+        wrap.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", close);
+        });
+      })();
+
+      // 1. Mobile Menu Toggle
+      const menuToggle = document.querySelector(".menu-toggle");
+      const siteNav = document.querySelector(".site-nav");
+
+      if (menuToggle && siteNav) {
+        menuToggle.addEventListener("click", () => {
+          const open = menuToggle.getAttribute("aria-expanded") === "true";
+          menuToggle.setAttribute("aria-expanded", String(!open));
+          siteNav.classList.toggle("is-open", !open);
+        });
+
+        siteNav.querySelectorAll("a").forEach(link => {
+          link.addEventListener("click", () => {
+            menuToggle.setAttribute("aria-expanded", "false");
+            siteNav.classList.remove("is-open");
+          });
+        });
+      }
+
+      // 2. Consultation Form Handler
+      const consultationForm = document.getElementById("consultationForm");
+      const successMessage = document.getElementById("formSuccessMessage");
+
+      if (consultationForm && successMessage) {
+        consultationForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const submitButton = consultationForm.querySelector("button[type='submit']");
+          submitButton.disabled = true;
+          submitButton.textContent = "Submitting enquiry...";
+
+          const formData = new FormData(consultationForm);
+
+          fetch(consultationForm.action, {
+            method: "POST",
+            body: formData,
+            headers: { Accept: "application/json" }
+          })
+            .then(response => {
+              if (!response.ok) throw new Error("Submission failed");
+              successMessage.textContent = "Thank you! Your travel enquiry has been received. Our destination specialist will contact you within 24 hours.";
+              successMessage.hidden = false;
+              consultationForm.reset();
+              successMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            })
+            .catch(() => {
+              successMessage.textContent = "The form could not be sent. Please call our hotline directly at +91 99110 09115.";
+              successMessage.hidden = false;
+            })
+            .finally(() => {
+              submitButton.disabled = false;
+              submitButton.innerHTML = 'Submit Holiday Enquiry <span aria-hidden="true">↗</span>';
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
