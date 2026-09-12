@@ -2087,38 +2087,31 @@
           syncQuoteDest(d.label);
         }
 
-        /* STORE-LINE QUEUE: fixed overflow-hidden frame, cards cycle inside.
-           order[] holds card ids left→right; the active card sits at pos 1.
-           Next/prev animate one slot, then the exited card wraps to the back. */
+        /* LEFT-ANCHORED QUEUE: Thailand is physically first — first in the
+           DOM and flush at the screen-left edge on load, reading cleanly
+           left-to-right with no wrap. order[] holds card ids left→right;
+           the active card always sits at pos 0.
+           Next slides one slot left, then the exited card wraps to the back.
+           Prev pre-wraps one card to the front, then slides back to 0. */
         let order = [], activeCard = 0, queueBusy = false, cardNodes = [];
-        function queueMetrics() {
+        function stepSize() {
           const w = cardNodes[0] ? cardNodes[0].offsetWidth : 0;
-          const cs = getComputedStyle(thumbSlides);
-          return {
-            w,
-            gap: parseFloat(cs.gap) || 0,
-            pad: parseFloat(cs.paddingLeft) || 0,
-            frame: thumbSlides.parentElement.clientWidth
-          };
+          const g = parseFloat(getComputedStyle(thumbSlides).gap) || 0;
+          return w + g;
         }
-        function queuePlace(pos, animate) {
-          const m = queueMetrics();
-          const x = m.pad + pos * (m.w + m.gap) + m.w / 2 - m.frame / 2;
+        function setX(x, animate) {
           thumbSlides.style.transition = animate ? "transform 0.45s ease" : "none";
-          thumbSlides.style.transform = `translateX(${-x}px)`;
+          thumbSlides.style.transform = `translateX(${x}px)`;
+          if (!animate) void thumbSlides.offsetWidth;
         }
         function queuePaint() {
           cardNodes.forEach((el, id) => el.classList.toggle("swiper-slide-thumb-active", id === activeCard));
         }
         function queueInit() {
           cardNodes = DATA.map((_, i) => thumbSlides.children[i]);
-          // EXPLICIT STARTING GRID (DATA = Thailand 0, Dubai 1, Maldives 2, Europe 3):
-          // [Europe | THAILAND(active, centered) | Dubai | Maldives]
-          // Next → Dubai → Maldives → Europe → loops back to Thailand.
-          order = [DATA.length - 1, ...DATA.map((_, i) => i).slice(0, DATA.length - 1)];
-          activeCard = 0; // Thailand is index 0 and starts centered
-          order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
-          queuePlace(1, false);
+          order = DATA.map((_, i) => i); // [0,1,2,3] Thailand first, DOM untouched
+          activeCard = 0;
+          setX(0, false);
           queuePaint();
         }
         function showMain(id) {
@@ -2128,28 +2121,41 @@
             render(id);
           }
         }
-        function queueSettle(dir) {
-          if (dir > 0) { while (order[1] !== activeCard) order.push(order.shift()); }
-          else { while (order[1] !== activeCard) order.unshift(order.pop()); }
-          order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
-          queuePlace(1, false);
-          queuePaint();
+        function whenDone(fn) {
+          const done = e => {
+            if (e && e.propertyName && e.propertyName !== "transform") return;
+            thumbSlides.removeEventListener("transitionend", done);
+            clearTimeout(timer);
+            fn();
+          };
+          const timer = setTimeout(() => done({}), 700);
+          thumbSlides.addEventListener("transitionend", done);
         }
         function queueStep(dir) {
           if (queueBusy) return;
           queueBusy = true;
-          const n = DATA.length;
+          const n = DATA.length, s = stepSize();
           activeCard = (activeCard + dir + n) % n;
           showMain(activeCard);
-          queuePlace(1 + dir, true);
-          const done = e => {
-            if (e && e.propertyName && e.propertyName !== "transform") return;
-            thumbSlides.removeEventListener("transitionend", done);
-            queueSettle(dir);
-            queueBusy = false;
-          };
-          thumbSlides.addEventListener("transitionend", done);
-          setTimeout(() => { if (queueBusy) done({}); }, 700);
+          if (dir > 0) {
+            setX(-s, true);
+            whenDone(() => {
+              order.push(order.shift());
+              order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
+              setX(0, false);
+              queuePaint();
+              queueBusy = false;
+            });
+          } else {
+            order.unshift(order.pop());
+            order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
+            setX(-s, false);
+            setX(0, true);
+            whenDone(() => {
+              queuePaint();
+              queueBusy = false;
+            });
+          }
         }
         function initSwipers() {
           mainSwiper = new Swiper(".main-swiper", {
@@ -2175,9 +2181,9 @@
           const id = cardNodes.indexOf(s);
           if (id < 0 || id === activeCard) return;
           activeCard = id;
-          while (order[1] !== id) order.push(order.shift());
+          while (order[0] !== id) order.push(order.shift());
           order.forEach(qid => thumbSlides.appendChild(cardNodes[qid]));
-          queuePlace(1, false);
+          setX(0, false);
           queuePaint();
           showMain(id);
         });
@@ -2236,7 +2242,7 @@
           success.classList.remove("hidden");
         });
 
-        // Init: Thailand first, queue centered, GSAP entrance plays
+        // Init: Thailand first at the left edge, GSAP entrance plays
         queueInit();
         if (window.Swiper) initSwipers();
         else initFallback();
