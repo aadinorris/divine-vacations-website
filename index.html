@@ -1984,7 +1984,7 @@
 
         <div class="mt-20 flex flex-col gap-3 border-t border-white/10 pt-7 text-[10px] uppercase tracking-[0.14em] text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright © 2026 Divine Vacations. All rights reserved.</p>
-          <p class="opacity-60">Build mobile-slider</p>
+          <p class="opacity-60">Build thailand-first</p>
           <p>Designed for high-end travel conversions.</p>
         </div>
       </div>
@@ -2112,8 +2112,11 @@
         }
         function queueInit() {
           cardNodes = DATA.map((_, i) => thumbSlides.children[i]);
+          // EXPLICIT STARTING GRID (DATA = Thailand 0, Dubai 1, Maldives 2, Europe 3):
+          // [Europe | THAILAND(active, centered) | Dubai | Maldives]
+          // Next → Dubai → Maldives → Europe → loops back to Thailand.
           order = [DATA.length - 1, ...DATA.map((_, i) => i).slice(0, DATA.length - 1)];
-          activeCard = 0;
+          activeCard = 0; // Thailand is index 0 and starts centered
           order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
           queuePlace(1, false);
           queuePaint();
