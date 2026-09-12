@@ -2065,25 +2065,33 @@
           syncQuoteDest(d.label);
         }
 
-        /* Swiper engines: MAIN bg fades; THUMBS act as synced navigation */
+        /* Swiper engines: MAIN bg fades; THUMBS act as a cyclic queue.
+           Mobile: strict single-focus loop (1 centered card, wraps around).
+           Desktop: free multi-card row. Arrows step the queue either way. */
         function initSwipers() {
           thumbSwiper = new Swiper(".thumbs", {
-            slidesPerView: "auto",
-            spaceBetween: 12,
+            slidesPerView: 1,
+            centeredSlides: true,
+            spaceBetween: 0,
             speed: 600,
-            loop: false,
+            loop: true,
+            loopedSlides: DATA.length,
             slideToClickedSlide: true,
-            watchSlidesProgress: true
+            watchSlidesProgress: true,
+            breakpoints: {
+              768: { slidesPerView: "auto", centeredSlides: false, spaceBetween: 12 }
+            }
           });
           mainSwiper = new Swiper(".main-swiper", {
             effect: "fade",
             fadeEffect: { crossFade: true },
             speed: 900,
-            loop: false,
+            loop: true,
+            loopedSlides: DATA.length,
             threshold: 12,
             thumbs: { swiper: thumbSwiper }
           });
-          mainSwiper.on("slideChange", () => render(mainSwiper.activeIndex));
+          mainSwiper.on("slideChange", () => render(mainSwiper.realIndex));
         }
 
         /* Minimal fallback if CDNs are unreachable */
