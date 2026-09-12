@@ -82,14 +82,10 @@
       outline-offset: 3px;
     }
 
-    /* Hero thumb snap track: pure CSS scroll-snap (no thumbs Swiper).
+    /* Hero thumb store-line queue: fixed frame, cards cycle inside it.
        Unlayered so it wins over Swiper's own slide-width stylesheet. */
     #thumb-slides {
-      scrollbar-width: none;
-    }
-
-    #thumb-slides::-webkit-scrollbar {
-      display: none;
+      will-change: transform;
     }
 
     #thumb-slides > .swiper-slide {
@@ -443,7 +439,7 @@
             class="thumbs w-full overflow-hidden"
             aria-label="Destination thumbnails"
           >
-            <div id="thumb-slides" class="swiper-wrapper flex snap-x snap-mandatory items-end gap-4 overflow-x-auto px-4 md:overflow-visible"></div>
+            <div id="thumb-slides" class="swiper-wrapper flex items-end gap-4 px-4"></div>
           </div>
           <div class="mt-4 flex items-center gap-3">
             <button
@@ -2091,13 +2087,66 @@
           syncQuoteDest(d.label);
         }
 
-        /* MAIN bg fades (Swiper); THUMBS are a pure CSS scroll-snap track.
-           Card click / arrows drive MAIN; MAIN changes re-center the thumb. */
-        function syncThumbs(i) {
-          const slides = [...thumbSlides.children];
-          slides.forEach((el, k) => el.classList.toggle("swiper-slide-thumb-active", k === i));
-          const el = slides[i];
-          if (el) el.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        /* STORE-LINE QUEUE: fixed overflow-hidden frame, cards cycle inside.
+           order[] holds card ids left→right; the active card sits at pos 1.
+           Next/prev animate one slot, then the exited card wraps to the back. */
+        let order = [], activeCard = 0, queueBusy = false, cardNodes = [];
+        function queueMetrics() {
+          const w = cardNodes[0] ? cardNodes[0].offsetWidth : 0;
+          const cs = getComputedStyle(thumbSlides);
+          return {
+            w,
+            gap: parseFloat(cs.gap) || 0,
+            pad: parseFloat(cs.paddingLeft) || 0,
+            frame: thumbSlides.parentElement.clientWidth
+          };
+        }
+        function queuePlace(pos, animate) {
+          const m = queueMetrics();
+          const x = m.pad + pos * (m.w + m.gap) + m.w / 2 - m.frame / 2;
+          thumbSlides.style.transition = animate ? "transform 0.45s ease" : "none";
+          thumbSlides.style.transform = `translateX(${-x}px)`;
+        }
+        function queuePaint() {
+          cardNodes.forEach((el, id) => el.classList.toggle("swiper-slide-thumb-active", id === activeCard));
+        }
+        function queueInit() {
+          cardNodes = DATA.map((_, i) => thumbSlides.children[i]);
+          order = [DATA.length - 1, ...DATA.map((_, i) => i).slice(0, DATA.length - 1)];
+          activeCard = 0;
+          order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
+          queuePlace(1, false);
+          queuePaint();
+        }
+        function showMain(id) {
+          if (mainSwiper) mainSwiper.slideTo(id);
+          else {
+            [...heroSlides.children].forEach((el, k) => { el.style.display = k === id ? "block" : "none"; });
+            render(id);
+          }
+        }
+        function queueSettle(dir) {
+          if (dir > 0) { while (order[1] !== activeCard) order.push(order.shift()); }
+          else { while (order[1] !== activeCard) order.unshift(order.pop()); }
+          order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
+          queuePlace(1, false);
+          queuePaint();
+        }
+        function queueStep(dir) {
+          if (queueBusy) return;
+          queueBusy = true;
+          const n = DATA.length;
+          activeCard = (activeCard + dir + n) % n;
+          showMain(activeCard);
+          queuePlace(1 + dir, true);
+          const done = e => {
+            if (e && e.propertyName && e.propertyName !== "transform") return;
+            thumbSlides.removeEventListener("transitionend", done);
+            queueSettle(dir);
+            queueBusy = false;
+          };
+          thumbSlides.addEventListener("transitionend", done);
+          setTimeout(() => { if (queueBusy) done({}); }, 700);
         }
         function initSwipers() {
           mainSwiper = new Swiper(".main-swiper", {
@@ -2105,44 +2154,31 @@
             fadeEffect: { crossFade: true },
             speed: 900,
             loop: false,
-            threshold: 12
+            threshold: 12,
+            allowTouchMove: false
           });
-          mainSwiper.on("slideChange", () => {
-            render(mainSwiper.activeIndex);
-            syncThumbs(mainSwiper.activeIndex);
-          });
-          thumbSlides.addEventListener("click", e => {
-            const s = e.target.closest(".swiper-slide");
-            if (!s || !mainSwiper) return;
-            mainSwiper.slideTo([...thumbSlides.children].indexOf(s));
-          });
+          mainSwiper.on("slideChange", () => render(mainSwiper.activeIndex));
         }
 
-        /* Minimal fallback if CDNs are unreachable */
-        function initFallback() {
-          const mains = [...heroSlides.children];
-          mains.forEach((el, k) => { el.style.display = k === 0 ? "block" : "none"; });
-          render(0);
-          thumbSlides.addEventListener("click", e => {
-            const s = e.target.closest(".swiper-slide");
-            if (!s) return;
-            const idx = [...thumbSlides.children].indexOf(s);
-            mains.forEach((el, k) => { el.style.display = k === idx ? "block" : "none"; });
-            thumbSlides.querySelectorAll(".swiper-slide").forEach((el, k) =>
-              el.classList.toggle("swiper-slide-thumb-active", k === idx));
-            render(idx);
-          });
-        }
+        /* Minimal fallback if CDNs are unreachable (queue still cycles) */
+        function initFallback() { showMain(0); }
 
-        // Arrow navigation (thumbs follow in sync via Thumbs module)
-        document.getElementById("thumb-prev").addEventListener("click", () => {
-          if (mainSwiper) mainSwiper.slidePrev();
-          else render(current - 1);
+        // Fixed arrows drive the queue; thumb taps jump straight to a card
+        document.getElementById("thumb-prev").addEventListener("click", () => queueStep(-1));
+        document.getElementById("thumb-next").addEventListener("click", () => queueStep(1));
+        thumbSlides.addEventListener("click", e => {
+          const s = e.target.closest(".swiper-slide");
+          if (!s || queueBusy) return;
+          const id = cardNodes.indexOf(s);
+          if (id < 0 || id === activeCard) return;
+          activeCard = id;
+          while (order[1] !== id) order.push(order.shift());
+          order.forEach(qid => thumbSlides.appendChild(cardNodes[qid]));
+          queuePlace(1, false);
+          queuePaint();
+          showMain(id);
         });
-        document.getElementById("thumb-next").addEventListener("click", () => {
-          if (mainSwiper) mainSwiper.slideNext();
-          else render(current + 1);
-        });
+        window.addEventListener("resize", () => queuePlace(1, false));
 
         // Quote modal — WhatsApp lead capture (v0 dialog above)
         const modal = document.getElementById("quote-modal");
@@ -2197,9 +2233,11 @@
           success.classList.remove("hidden");
         });
 
-        // Init: Thailand first, GSAP entrance plays
-        if (window.Swiper) { initSwipers(); render(0); }
+        // Init: Thailand first, queue centered, GSAP entrance plays
+        queueInit();
+        if (window.Swiper) initSwipers();
         else initFallback();
+        render(0);
       })();
 
       /* Destinations dropdown: click toggles, hover opens (desktop),
