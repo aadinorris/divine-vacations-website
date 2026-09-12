@@ -436,7 +436,7 @@
 
         <div class="w-full">
           <div
-            class="thumbs w-full overflow-hidden"
+            class="thumbs w-full max-w-full overflow-hidden box-border"
             aria-label="Destination thumbnails"
           >
             <div id="thumb-slides" class="swiper-wrapper flex items-end gap-4 px-4"></div>
@@ -2083,6 +2083,9 @@
             gsap.fromTo(desc,
               { y: 30, opacity: 0 },
               { y: 0, opacity: 1, duration: 0.8, delay: 0.15, ease: "power3.out", overwrite: "auto" });
+            gsap.fromTo([eyebrow, page],
+              { opacity: 0 },
+              { opacity: 1, duration: 0.5, ease: "power2.out", overwrite: "auto" });
           }
           syncQuoteDest(d.label);
         }
@@ -2179,6 +2182,11 @@
           showMain(id);
         });
         window.addEventListener("resize", () => queuePlace(1, false));
+        // Re-measure after full load (fonts/Tailwind can shift layout post-init)
+        window.addEventListener("load", () => queuePlace(1, false));
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => queuePlace(1, false));
+        }
 
         // Quote modal — WhatsApp lead capture (v0 dialog above)
         const modal = document.getElementById("quote-modal");
