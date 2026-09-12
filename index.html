@@ -93,7 +93,13 @@
     }
 
     #thumb-slides > .swiper-slide {
-      width: 85vw;
+      width: 10rem;
+    }
+
+    @media (min-width: 640px) {
+      #thumb-slides > .swiper-slide {
+        width: 11rem;
+      }
     }
 
     @media (min-width: 768px) {
@@ -434,7 +440,7 @@
 
         <div class="w-full">
           <div
-            class="swiper thumbs w-full"
+            class="thumbs w-full overflow-hidden"
             aria-label="Destination thumbnails"
           >
             <div id="thumb-slides" class="swiper-wrapper flex snap-x snap-mandatory items-end gap-4 overflow-x-auto px-4 md:overflow-visible"></div>
@@ -2057,7 +2063,7 @@
               <img src="${d.bg}" alt="${d.label}" decoding="async" class="hero-image h-full w-full object-cover" ${i > 0 ? 'loading="lazy"' : 'fetchpriority="high"'} />
             </div>`);
           thumbSlides.insertAdjacentHTML("beforeend", `
-            <div class="swiper-slide snap-center shrink-0 w-[85vw] md:w-[168px]">
+            <div class="swiper-slide snap-center shrink-0 w-40 sm:w-44 md:w-[168px]">
               <div class="thumb-frame relative aspect-[3/4] overflow-hidden rounded-2xl">
                 <img src="${d.thumb}" alt="${d.label}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
