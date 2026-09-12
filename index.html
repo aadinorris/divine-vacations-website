@@ -82,6 +82,26 @@
       outline-offset: 3px;
     }
 
+    /* Hero thumb snap track: pure CSS scroll-snap (no thumbs Swiper).
+       Unlayered so it wins over Swiper's own slide-width stylesheet. */
+    #thumb-slides {
+      scrollbar-width: none;
+    }
+
+    #thumb-slides::-webkit-scrollbar {
+      display: none;
+    }
+
+    #thumb-slides > .swiper-slide {
+      width: 85vw;
+    }
+
+    @media (min-width: 768px) {
+      #thumb-slides > .swiper-slide {
+        width: 168px;
+      }
+    }
+
     .hero-image {
       transition: transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
@@ -417,7 +437,7 @@
             class="swiper thumbs w-full"
             aria-label="Destination thumbnails"
           >
-            <div id="thumb-slides" class="swiper-wrapper items-end"></div>
+            <div id="thumb-slides" class="swiper-wrapper flex snap-x snap-mandatory items-end gap-4 overflow-x-auto px-4 md:overflow-visible"></div>
           </div>
           <div class="mt-4 flex items-center gap-3">
             <button
@@ -2026,7 +2046,7 @@
         const desc = document.getElementById("slide-description");
         const page = document.getElementById("slide-page");
         const total = String(DATA.length).padStart(2, "0");
-        let current = 0, mainSwiper = null, thumbSwiper = null;
+        let current = 0, mainSwiper = null;
 
         // Preload + build MAIN slides and THUMB cards
         DATA.forEach((d, i) => {
@@ -2037,7 +2057,7 @@
               <img src="${d.bg}" alt="${d.label}" decoding="async" class="hero-image h-full w-full object-cover" ${i > 0 ? 'loading="lazy"' : 'fetchpriority="high"'} />
             </div>`);
           thumbSlides.insertAdjacentHTML("beforeend", `
-            <div class="swiper-slide w-[148px] shrink-0 sm:w-[168px]">
+            <div class="swiper-slide snap-center shrink-0 w-[85vw] md:w-[168px]">
               <div class="thumb-frame relative aspect-[3/4] overflow-hidden rounded-2xl">
                 <img src="${d.thumb}" alt="${d.label}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
@@ -2065,25 +2085,31 @@
           syncQuoteDest(d.label);
         }
 
-        /* Swiper engines: MAIN bg fades; THUMBS act as synced navigation */
+        /* MAIN bg fades (Swiper); THUMBS are a pure CSS scroll-snap track.
+           Card click / arrows drive MAIN; MAIN changes re-center the thumb. */
+        function syncThumbs(i) {
+          const slides = [...thumbSlides.children];
+          slides.forEach((el, k) => el.classList.toggle("swiper-slide-thumb-active", k === i));
+          const el = slides[i];
+          if (el) el.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
         function initSwipers() {
-          thumbSwiper = new Swiper(".thumbs", {
-            slidesPerView: "auto",
-            spaceBetween: 12,
-            speed: 600,
-            loop: false,
-            slideToClickedSlide: true,
-            watchSlidesProgress: true
-          });
           mainSwiper = new Swiper(".main-swiper", {
             effect: "fade",
             fadeEffect: { crossFade: true },
             speed: 900,
             loop: false,
-            threshold: 12,
-            thumbs: { swiper: thumbSwiper }
+            threshold: 12
           });
-          mainSwiper.on("slideChange", () => render(mainSwiper.activeIndex));
+          mainSwiper.on("slideChange", () => {
+            render(mainSwiper.activeIndex);
+            syncThumbs(mainSwiper.activeIndex);
+          });
+          thumbSlides.addEventListener("click", e => {
+            const s = e.target.closest(".swiper-slide");
+            if (!s || !mainSwiper) return;
+            mainSwiper.slideTo([...thumbSlides.children].indexOf(s));
+          });
         }
 
         /* Minimal fallback if CDNs are unreachable */
