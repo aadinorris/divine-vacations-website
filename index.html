@@ -2187,7 +2187,7 @@
           queuePaint();
           showMain(id);
         });
-        window.addEventListener("resize", () => queuePlace(1, false));
+        window.addEventListener("resize", () => { if (!queueBusy) setX(0, false); });
 
         // Quote modal — WhatsApp lead capture (v0 dialog above)
         const modal = document.getElementById("quote-modal");
