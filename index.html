@@ -82,28 +82,6 @@
       outline-offset: 3px;
     }
 
-    /* Hero thumb store-line queue: fixed frame, cards cycle inside it.
-       Unlayered so it wins over Swiper's own slide-width stylesheet. */
-    #thumb-slides {
-      will-change: transform;
-    }
-
-    #thumb-slides > .swiper-slide {
-      width: 10rem;
-    }
-
-    @media (min-width: 640px) {
-      #thumb-slides > .swiper-slide {
-        width: 11rem;
-      }
-    }
-
-    @media (min-width: 768px) {
-      #thumb-slides > .swiper-slide {
-        width: 168px;
-      }
-    }
-
     .hero-image {
       transition: transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
@@ -226,62 +204,6 @@
       transform: rotate(180deg);
     }
 
-    /* Mobile snap carousels for card rows */
-    @media (max-width: 1023.5px) {
-      .snap-track {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        padding-bottom: 0.5rem;
-      }
-
-      .snap-track::-webkit-scrollbar {
-        display: none;
-      }
-
-      .snap-track > * {
-        flex: 0 0 78%;
-        max-width: 78%;
-        scroll-snap-align: center;
-      }
-    }
-
-    @media (min-width: 640px) and (max-width: 1023.5px) {
-      .snap-track > * {
-        flex-basis: 47%;
-        max-width: 47%;
-      }
-    }
-
-    /* Animated CTA trailing arrows */
-    .offering-action .offering-arrow {
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-
-    .offering-card:hover .offering-arrow,
-    .offering-action:active .offering-arrow {
-      transform: translate(3px, -3px);
-    }
-
-    .offering-action:active {
-      transform: scale(0.97);
-    }
-
-    /* Touch devices: CTAs are hover-revealed on desktop — keep visible */
-    @media (hover: none) {
-      .offering-action {
-        transform: none;
-        color: #fff;
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -326,10 +248,6 @@
         <img
           src="divine-vacations-logo.png"
           alt="Divine Vacations"
-          width="800"
-          height="267"
-          decoding="async"
-          fetchpriority="high"
           class="h-10 w-auto rounded-lg border border-white bg-white px-4 py-1 object-contain shadow-lg md:h-14"
         />
       </a>
@@ -436,10 +354,10 @@
 
         <div class="w-full">
           <div
-            class="thumbs w-full overflow-hidden"
+            class="swiper thumbs w-full"
             aria-label="Destination thumbnails"
           >
-            <div id="thumb-slides" class="swiper-wrapper flex items-end gap-4 px-4"></div>
+            <div id="thumb-slides" class="swiper-wrapper items-end"></div>
           </div>
           <div class="mt-4 flex items-center gap-3">
             <button
@@ -488,7 +406,7 @@
         </p>
       </div>
 
-      <div id="offering-grid" class="snap-track mt-14 grid gap-5 lg:grid-cols-2">
+      <div id="offering-grid" class="mt-14 grid gap-5 lg:grid-cols-2">
         <article class="offering-card group relative min-h-[28rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d] lg:min-h-[34rem]">
           <img
             class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
@@ -544,12 +462,7 @@
         </article>
       </div>
 
-      <div class="mt-4 flex justify-end gap-3 lg:hidden" data-track-nav="offering-grid">
-        <button type="button" data-dir="-1" aria-label="Previous destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">←</button>
-        <button type="button" data-dir="1" aria-label="Next destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">→</button>
-      </div>
-
-      <div id="offering-grid-small" class="snap-track mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <article class="offering-card group relative min-h-[23rem] overflow-hidden rounded-2xl border border-white/10 bg-[#10182d]">
           <img
             class="offering-image absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
@@ -657,11 +570,6 @@
             </button>
           </div>
         </article>
-      </div>
-
-      <div class="mt-4 flex justify-end gap-3 lg:hidden" data-track-nav="offering-grid-small">
-        <button type="button" data-dir="-1" aria-label="Previous destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">←</button>
-        <button type="button" data-dir="1" aria-label="Next destinations" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">→</button>
       </div>
     </div>
   </section>
@@ -817,32 +725,32 @@
            filename below. Tiles show the names until the files exist. -->
       <div class="partner-logo-grid mt-8">
         <article class="partner-card partner-logo-card">
-          <img src="images/partners/tafi.png" alt="TAFI — Travel Agents Federation of India" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <img src="images/partners/tafi.png" alt="TAFI — Travel Agents Federation of India" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
           <p>TAFI</p>
           <span>Industry affiliation</span>
         </article>
         <article class="partner-card partner-logo-card">
-          <img src="images/partners/rail-europe.png" alt="Rail Europe" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <img src="images/partners/rail-europe.png" alt="Rail Europe" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
           <p>Rail Europe</p>
           <span>Rail journeys</span>
         </article>
         <article class="partner-card partner-logo-card">
-          <img src="images/partners/iatte.png" alt="IATTE — Indian Association of Travel and Tourism Experts" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <img src="images/partners/iatte.png" alt="IATTE — Indian Association of Travel and Tourism Experts" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
           <p>IATTE</p>
           <span>Travel &amp; tourism</span>
         </article>
         <article class="partner-card partner-logo-card">
-          <img src="images/partners/britrail.png" alt="BritRail" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <img src="images/partners/britrail.png" alt="BritRail" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
           <p>BritRail</p>
           <span>UK rail passes</span>
         </article>
         <article class="partner-card partner-logo-card">
-          <img src="images/partners/china-like-never-before.png" alt="China Like Never Before" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <img src="images/partners/china-like-never-before.png" alt="China Like Never Before" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
           <p>China Like</p>
           <span>Never Before</span>
         </article>
         <article class="partner-card partner-logo-card">
-          <img src="images/partners/ok-ferry.png" alt="OK Ferry" loading="lazy" decoding="async" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
+          <img src="images/partners/ok-ferry.png" alt="OK Ferry" loading="lazy" onload="this.parentElement.classList.add('has-logo')" onerror="this.remove()" />
           <p>OK Ferry</p>
           <span>Island transfers</span>
         </article>
@@ -1154,7 +1062,7 @@
 
       <div class="mt-5 grid gap-5 md:grid-cols-2">
         <article class="about-card flex gap-6 rounded-2xl border border-white/10 bg-[#10182d]/80 p-7 backdrop-blur-md sm:items-center sm:p-8">
-          <span class="founder-photo">JN<img src="images/team/joy-norris.jpg" alt="Mr. Joy Norris" loading="lazy" decoding="async" /></span>
+          <span class="founder-photo">JN<img src="images/team/joy-norris.jpg" alt="Mr. Joy Norris" loading="lazy" /></span>
           <div>
             <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Founder &amp; Visionary</p>
             <h3 class="mt-2 font-serif !text-white text-3xl">Mr. Joy Norris</h3>
@@ -1162,10 +1070,10 @@
           </div>
         </article>
         <article class="about-card flex gap-6 rounded-2xl border border-white/10 bg-[#10182d]/80 p-7 backdrop-blur-md sm:items-center sm:p-8">
-          <span class="founder-photo">SP<img src="images/team/shailendra-pawar.jpg" alt="Mr. Shailendra" loading="lazy" decoding="async" /></span>
+          <span class="founder-photo">SP<img src="images/team/shailendra-pawar.jpg" alt="Mr. Shailendra Pawar" loading="lazy" /></span>
           <div>
             <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Travel Operations</p>
-            <h3 class="mt-2 font-serif !text-white text-3xl">Mr. Shailendra</h3>
+            <h3 class="mt-2 font-serif !text-white text-3xl">Mr. Shailendra Pawar</h3>
             <p class="mt-2 text-sm leading-6 text-gray-400">Runs the operations engine — rail passes, visas, transfers and on-ground teams in sync.</p>
           </div>
         </article>
@@ -1368,7 +1276,7 @@
         </p>
       </div>
 
-      <div id="secondary-grid" class="snap-track mt-14 grid gap-5 lg:grid-cols-3">
+      <div class="mt-14 grid gap-5 lg:grid-cols-3">
         <!-- BALI -->
         <article class="secondary-module group relative flex min-h-[34rem] flex-col justify-end overflow-hidden rounded-3xl border border-white/10">
           <img
@@ -1494,16 +1402,11 @@
         </article>
       </div>
 
-      <div class="mt-4 flex justify-end gap-3 lg:hidden" data-track-nav="secondary-grid">
-        <button type="button" data-dir="-1" aria-label="Previous packages" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">←</button>
-        <button type="button" data-dir="1" aria-label="Next packages" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white transition hover:bg-white hover:text-[#07111f]">→</button>
-      </div>
-
       <!-- Master Live Consultation -->
       <div class="secondary-cta relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl border border-emerald-400/25 bg-gradient-to-br from-emerald-500/[0.12] via-[#10182d] to-[#10182d] p-8 backdrop-blur-xl sm:p-10">
         <div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
           <span class="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#f4e3bb] via-[#d8b986] to-[#b98f4e] font-display text-2xl font-extrabold text-[#102b35] ring-4 ring-emerald-300/30">
-            MK<img src="images/team/komal.jpg" alt="Ms. Komal" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+            MK<img src="images/team/komal.jpg" alt="Ms. Komal" loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
           </span>
           <div class="flex-1">
             <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">
@@ -1817,50 +1720,6 @@
       }
     })();
   </script>
-  <script>
-    /* Mobile snap-track arrows + CTA arrow wrapping (section-only) */
-    (() => {
-      document.querySelectorAll("[data-track-nav]").forEach((nav) => {
-        const track = document.getElementById(nav.dataset.trackNav);
-        if (!track) return;
-        nav.querySelectorAll("button").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const card = track.querySelector(":scope > *");
-            const step = (card ? card.offsetWidth : track.clientWidth) + 20;
-            track.scrollBy({
-              left: (btn.dataset.dir === "-1" ? -1 : 1) * step,
-              behavior: "smooth"
-            });
-          });
-        });
-      });
-
-      document.querySelectorAll(".offering-action").forEach((btn) => {
-        [...btn.childNodes].forEach((node) => {
-          if (node.nodeType === 3 && node.textContent.includes("↗")) {
-            const parts = node.textContent.split("↗");
-            const frag = document.createDocumentFragment();
-            parts.forEach((part, idx) => {
-              if (part) frag.appendChild(document.createTextNode(part));
-              if (idx < parts.length - 1) {
-                const s = document.createElement("span");
-                s.className = "offering-arrow";
-                s.setAttribute("aria-hidden", "true");
-                s.textContent = "↗";
-                frag.appendChild(s);
-              }
-            });
-            btn.replaceChild(frag, node);
-          } else if (
-            node.nodeType === 1 &&
-            node.textContent.trim() === "↗"
-          ) {
-            node.classList.add("offering-arrow");
-          }
-        });
-      });
-    })();
-  </script>
 
     <footer
       id="global-contact"
@@ -1984,7 +1843,6 @@
 
         <div class="mt-20 flex flex-col gap-3 border-t border-white/10 pt-7 text-[10px] uppercase tracking-[0.14em] text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright © 2026 Divine Vacations. All rights reserved.</p>
-          <p class="opacity-60">Build thailand-first</p>
           <p>Designed for high-end travel conversions.</p>
         </div>
       </div>
@@ -2048,7 +1906,7 @@
         const desc = document.getElementById("slide-description");
         const page = document.getElementById("slide-page");
         const total = String(DATA.length).padStart(2, "0");
-        let current = 0, mainSwiper = null;
+        let current = 0, mainSwiper = null, thumbSwiper = null;
 
         // Preload + build MAIN slides and THUMB cards
         DATA.forEach((d, i) => {
@@ -2056,12 +1914,12 @@
           const b = new Image(); b.src = d.thumb;
           heroSlides.insertAdjacentHTML("beforeend", `
             <div class="swiper-slide !h-full">
-              <img src="${d.bg}" alt="${d.label}" decoding="async" class="hero-image h-full w-full object-cover" ${i > 0 ? 'loading="lazy"' : 'fetchpriority="high"'} />
+              <img src="${d.bg}" alt="${d.label}" class="hero-image h-full w-full object-cover" ${i > 0 ? 'loading="lazy"' : 'fetchpriority="high"'} />
             </div>`);
           thumbSlides.insertAdjacentHTML("beforeend", `
-            <div class="swiper-slide snap-center shrink-0 w-40 sm:w-44 md:w-[168px]">
+            <div class="swiper-slide w-[148px] shrink-0 sm:w-[168px]">
               <div class="thumb-frame relative aspect-[3/4] overflow-hidden rounded-2xl">
-                <img src="${d.thumb}" alt="${d.label}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+                <img src="${d.thumb}" alt="${d.label}" class="h-full w-full object-cover" loading="lazy" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
                 <p class="absolute bottom-3 left-3 right-3 font-display text-sm font-bold leading-snug">${d.label}</p>
               </div>
@@ -2087,107 +1945,52 @@
           syncQuoteDest(d.label);
         }
 
-        /* LEFT-ANCHORED QUEUE: Thailand is physically first — first in the
-           DOM and flush at the screen-left edge on load, reading cleanly
-           left-to-right with no wrap. order[] holds card ids left→right;
-           the active card always sits at pos 0.
-           Next slides one slot left, then the exited card wraps to the back.
-           Prev pre-wraps one card to the front, then slides back to 0. */
-        let order = [], activeCard = 0, queueBusy = false, cardNodes = [];
-        function stepSize() {
-          const w = cardNodes[0] ? cardNodes[0].offsetWidth : 0;
-          const g = parseFloat(getComputedStyle(thumbSlides).gap) || 0;
-          return w + g;
-        }
-        function setX(x, animate) {
-          thumbSlides.style.transition = animate ? "transform 0.45s ease" : "none";
-          thumbSlides.style.transform = `translateX(${x}px)`;
-          if (!animate) void thumbSlides.offsetWidth;
-        }
-        function queuePaint() {
-          cardNodes.forEach((el, id) => el.classList.toggle("swiper-slide-thumb-active", id === activeCard));
-        }
-        function queueInit() {
-          cardNodes = DATA.map((_, i) => thumbSlides.children[i]);
-          order = DATA.map((_, i) => i); // [0,1,2,3] Thailand first, DOM untouched
-          activeCard = 0;
-          setX(0, false);
-          queuePaint();
-        }
-        function showMain(id) {
-          if (mainSwiper) mainSwiper.slideTo(id);
-          else {
-            [...heroSlides.children].forEach((el, k) => { el.style.display = k === id ? "block" : "none"; });
-            render(id);
-          }
-        }
-        function whenDone(fn) {
-          const done = e => {
-            if (e && e.propertyName && e.propertyName !== "transform") return;
-            thumbSlides.removeEventListener("transitionend", done);
-            clearTimeout(timer);
-            fn();
-          };
-          const timer = setTimeout(() => done({}), 700);
-          thumbSlides.addEventListener("transitionend", done);
-        }
-        function queueStep(dir) {
-          if (queueBusy) return;
-          queueBusy = true;
-          const n = DATA.length, s = stepSize();
-          activeCard = (activeCard + dir + n) % n;
-          showMain(activeCard);
-          if (dir > 0) {
-            setX(-s, true);
-            whenDone(() => {
-              order.push(order.shift());
-              order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
-              setX(0, false);
-              queuePaint();
-              queueBusy = false;
-            });
-          } else {
-            order.unshift(order.pop());
-            order.forEach(id => thumbSlides.appendChild(cardNodes[id]));
-            setX(-s, false);
-            setX(0, true);
-            whenDone(() => {
-              queuePaint();
-              queueBusy = false;
-            });
-          }
-        }
+        /* Swiper engines: MAIN bg fades; THUMBS act as synced navigation */
         function initSwipers() {
+          thumbSwiper = new Swiper(".thumbs", {
+            slidesPerView: "auto",
+            spaceBetween: 12,
+            speed: 600,
+            loop: false,
+            slideToClickedSlide: true,
+            watchSlidesProgress: true
+          });
           mainSwiper = new Swiper(".main-swiper", {
             effect: "fade",
             fadeEffect: { crossFade: true },
             speed: 900,
             loop: false,
             threshold: 12,
-            allowTouchMove: false
+            thumbs: { swiper: thumbSwiper }
           });
           mainSwiper.on("slideChange", () => render(mainSwiper.activeIndex));
         }
 
-        /* Minimal fallback if CDNs are unreachable (queue still cycles) */
-        function initFallback() { showMain(0); }
+        /* Minimal fallback if CDNs are unreachable */
+        function initFallback() {
+          const mains = [...heroSlides.children];
+          mains.forEach((el, k) => { el.style.display = k === 0 ? "block" : "none"; });
+          render(0);
+          thumbSlides.addEventListener("click", e => {
+            const s = e.target.closest(".swiper-slide");
+            if (!s) return;
+            const idx = [...thumbSlides.children].indexOf(s);
+            mains.forEach((el, k) => { el.style.display = k === idx ? "block" : "none"; });
+            thumbSlides.querySelectorAll(".swiper-slide").forEach((el, k) =>
+              el.classList.toggle("swiper-slide-thumb-active", k === idx));
+            render(idx);
+          });
+        }
 
-        // Fixed arrows drive the queue; thumb taps jump straight to a card
-        document.getElementById("thumb-prev").addEventListener("click", () => queueStep(-1));
-        document.getElementById("thumb-next").addEventListener("click", () => queueStep(1));
-        thumbSlides.addEventListener("click", e => {
-          const s = e.target.closest(".swiper-slide");
-          if (!s || queueBusy) return;
-          const id = cardNodes.indexOf(s);
-          if (id < 0 || id === activeCard) return;
-          activeCard = id;
-          while (order[0] !== id) order.push(order.shift());
-          order.forEach(qid => thumbSlides.appendChild(cardNodes[qid]));
-          setX(0, false);
-          queuePaint();
-          showMain(id);
+        // Arrow navigation (thumbs follow in sync via Thumbs module)
+        document.getElementById("thumb-prev").addEventListener("click", () => {
+          if (mainSwiper) mainSwiper.slidePrev();
+          else render(current - 1);
         });
-        window.addEventListener("resize", () => { if (!queueBusy) setX(0, false); });
+        document.getElementById("thumb-next").addEventListener("click", () => {
+          if (mainSwiper) mainSwiper.slideNext();
+          else render(current + 1);
+        });
 
         // Quote modal — WhatsApp lead capture (v0 dialog above)
         const modal = document.getElementById("quote-modal");
@@ -2242,11 +2045,9 @@
           success.classList.remove("hidden");
         });
 
-        // Init: Thailand first at the left edge, GSAP entrance plays
-        queueInit();
-        if (window.Swiper) initSwipers();
+        // Init: Thailand first, GSAP entrance plays
+        if (window.Swiper) { initSwipers(); render(0); }
         else initFallback();
-        render(0);
       })();
 
       /* Destinations dropdown: click toggles, hover opens (desktop),
